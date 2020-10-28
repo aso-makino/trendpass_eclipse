@@ -1,2 +1,4 @@
 /.metadata/
-*.classpath
+trendpass/.classpath
+trendpass/src/hidden/
+
