@@ -3,27 +3,20 @@ package beans;
 import java.awt.image.BufferedImage;
 
 public class GenreBeans {
-	private String userId;
-	private String userName;
-	private BufferedImage userIcon;
+	private String genreId;
+	private String genreName;
 
-	public String getUserId() {
-		return userId;
+	public String getGenreId() {
+		return genreId;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setGenreId(String genreId) {
+		this.genreId = genreId;
 	}
-	public String getUserName() {
-		return userName;
+	public String getGenreName() {
+		return genreName;
 	}
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-	public BufferedImage getUserIcon() {
-		return userIcon;
-	}
-	public void setUserIcon(BufferedImage userIcon) {
-		this.userIcon = userIcon;
+	public void setGenreName(String genreName) {
+		this.genreName = genreName;
 	}
 
 }

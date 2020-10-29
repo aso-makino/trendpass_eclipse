@@ -1,20 +1,29 @@
 package beans;
 
-public class LoginBeans {
-	private String genreId;
-	private String genreName;
+import java.awt.image.BufferedImage;
 
-	public String getGenreId() {
-		return genreId;
+public class LoginBeans {
+	private String userId;
+	private String userName;
+	private BufferedImage userIcon;
+
+	public String getUserId() {
+		return userId;
 	}
-	public void setGenreId(String genreId) {
-		this.genreId = genreId;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
-	public String getGenreName() {
-		return genreName;
+	public String getUserName() {
+		return userName;
 	}
-	public void setGenreName(String genreName) {
-		this.genreName = genreName;
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public BufferedImage getUserIcon() {
+		return userIcon;
+	}
+	public void setUserIcon(BufferedImage userIcon) {
+		this.userIcon = userIcon;
 	}
 
 }
