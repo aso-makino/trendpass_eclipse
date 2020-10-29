@@ -1,0 +1,5 @@
+contextsDir=/Users/kurokikazuyuki/Desktop/Eclipse_2020-03.app/Contents/tomcat/8/conf/Catalina/localhost
+eclipse.preferences.version=1
+tomcatConfigFile=/Users/kurokikazuyuki/Desktop/Eclipse_2020-03.app/Contents/tomcat/8/conf/server.xml
+tomcatDir=/Users/kurokikazuyuki/Desktop/Eclipse_2020-03.app/Contents/tomcat/8
+tomcatVersion=tomcatV8
