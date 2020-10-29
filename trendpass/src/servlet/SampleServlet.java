@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,13 +14,33 @@ import javax.servlet.http.HttpServletResponse;
 public class SampleServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    public void doGet(HttpServletRequest request,HttpServletResponse response)
+	    		throws ServletException, IOException{
 
-		System.out.println("this is sample!");
+	    	String a = request.getServletPath();
+	        if ("/test".equals(request.getServletPath())){
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/sample.jsp");
-		dispatcher.forward(request, response);
+	        	// ヘッダ情報などセット
+	        	response.setContentType("application/json");
+	        	response.setHeader("Cache-Control", "nocache");
+	        	response.setCharacterEncoding("utf-8");
 
-	}
+	        	ObjectMapper mapper = new ObjectMapper();
+
+	        	String name  = request.getParameter("name");
+	            String greet = "こんにちは、" + name + "さん。";
+
+	        	Map<String, Object> resMap = new HashMap<>();
+				resMap.put("str",greet);
+
+				// オブジェクトをJson文字列に変更
+				String resJson = mapper.writeValueAsString(resMap);
+
+	            PrintWriter out = response.getWriter();
+	            out.print(resJson);
+
+	        }
+
+	    }
 
 }
