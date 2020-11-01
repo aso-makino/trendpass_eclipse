@@ -7,10 +7,11 @@
 		maxTotal="100"
 		maxIdle="20"
 		maxWaitMillis="-1"
-		username="JousenB4"
-		password="G3x&amp;M7gk"
+		username="root"
+		password=""
 		driverClassName="com.mysql.cj.jdbc.Driver"
-		url="jdbc:mysql://localhost:3306/trouble_resolution?serverTimezone=JST"
+		url="jdbc:mysql://localhost:3306/trendpassdb?serverTimezone=JST"
 		validationQuery="SELECT 0"
+		allowCasualMultipartParsing="true"
 	 />
 </Context>
