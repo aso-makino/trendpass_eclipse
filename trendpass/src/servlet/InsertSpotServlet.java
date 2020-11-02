@@ -1,8 +1,11 @@
 package servlet;
 
-import java.io.ByteArrayOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -22,11 +25,11 @@ import model.SpotModel;
  * Servlet implementation class InsertReviewServlet
  */
 @WebServlet("/InsertSpot")
-@MultipartConfig(location = "/data/upload_tmp")
+@MultipartConfig(location = "")
 public class InsertSpotServlet extends HttpServlet {
 	//private static final long serialVersionUID = 1L;
 
-
+@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -46,15 +49,32 @@ public class InsertSpotServlet extends HttpServlet {
 		//spotIdはAutoIncrementのため不要
 		int userId = 0000000;
 		String spotName = "博多駅";
-		String genreId = "00";
-		Part spotImage = request.getPart("image");
-		InputStream inputStream = spotImage.getInputStream();
-
+		String genreId = "0";
+		//Part spotImage = request.getPart("image");
+		//InputStream inputStream = spotImage.getInputStream();
 		//spotImage.write("image/test.file");
 		//LatLng positionInfo; 位置情報
 
+		//画像の文字列のパラメータを取得
+		String title = getStringParamFromPart(request);
+
+		//Windowsとmacのパスの差を吸収
+		String outputDir = System.getProperty("user.home")+"/output_imgfile";
+
+		//送られてきた画像の情報を取得
+		Part part = request.getPart("image");
+
+		//ファイル情報取得
+		String filename = this.getFileName(part);
+
+		//出力フォルダ作成
+		makeDir(outputDir);
+
+		//画像をoutputDirで指定した場所へコピー
+		part.write(outputDir + "/" + filename);
+
 		//画像ストリームの取得
-		byte[] bytes = convertInputStreamToByteArray(inputStream);
+		//byte[] inputStream_byte = convertInputStreamToByteArray(inputStream);
 
         //Modelインスタンス生成
         SpotModel spotModel = new SpotModel();
@@ -65,7 +85,8 @@ public class InsertSpotServlet extends HttpServlet {
         //スポット投稿メソッド
         spotBeans.setGenreId(genreId);
         spotBeans.setSpotName(spotName);
-        boolean insertSpot = SpotModel.insertSpot(spotBeans,userId,inputStream);
+        spotBeans.setFilename(filename);
+        boolean insertSpot = SpotModel.insertSpot(spotBeans,userId);
 
         //RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/test.jsp");
 		//dispatcher.forward(request, response);
@@ -81,6 +102,7 @@ public class InsertSpotServlet extends HttpServlet {
 
 	}
 	 //InputStreamをByte配列にする
+	/*
     public byte[] convertInputStreamToByteArray(InputStream inputStream) throws IOException {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         int nRead;
@@ -89,5 +111,64 @@ public class InsertSpotServlet extends HttpServlet {
             buffer.write(data, 0, nRead);
         }
         return buffer.toByteArray();
+    }
+    */
+	/**
+     * アップロードされたファイル名をヘッダ情報より取得する
+     * @param part
+     * @return
+     */
+    private String getFileName(Part part) {
+        String name = null;
+        for (String dispotion : part.getHeader("Content-Disposition").split(";")) {
+            if (dispotion.trim().startsWith("filename")) {
+                name = dispotion.substring(dispotion.indexOf("=") + 1).replace("\"", "").trim();
+                name = name.substring(name.lastIndexOf("\\") + 1);
+                break;
+            }
+        }
+        return name;
+    }
+    /**
+     * Multipartから文字列パラメータを取得する
+     * @param request
+     * @return
+     * @throws IllegalStateException
+     * @throws IOException
+     * @throws ServletException
+     */
+    private String getStringParamFromPart(HttpServletRequest request) throws  IllegalStateException, IOException, ServletException{
+        String sparam = null;
+        Part part;
+
+        part = request.getPart("image");    //この「title」はJSPで指定されたname属性 <input type="text" name="image"・・・
+        String contentType = part.getContentType();
+
+        if ( contentType == null) {
+            try(InputStream inputStream = part.getInputStream()) {
+                BufferedReader bufReader = new BufferedReader(new InputStreamReader(inputStream));
+                sparam = bufReader.lines().collect(Collectors.joining(System.getProperty("line.separator")));
+
+            } catch (IOException e) {
+                throw e;
+            }
+        }
+
+        return sparam;
+
+    }
+
+    /**
+     * ディレクトリ作成
+     * @param dir
+     */
+    public static void makeDir(String dir){
+        //Fileオブジェクトを生成する
+        File f = new File(dir);
+
+        if (!f.exists()) {
+            //フォルダ作成実行
+            f.mkdirs();
+        }
     }
 }

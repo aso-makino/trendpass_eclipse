@@ -1,7 +1,5 @@
 package model;
 
-import java.io.InputStream;
-
 import beans.SpotBeans;
 import dao.SpotDao;
 
@@ -11,11 +9,11 @@ public class SpotModel{
 	 * @param userId
 	 * @param jenreId
 	 * @param spotName
-	 * @param is
+	 * @param filename
 	 * @return spotBeans
 	 */
 
-	public static boolean insertSpot(SpotBeans spotBeans, int userId, InputStream inputStream) {
+	public static boolean insertSpot(SpotBeans spotBeans, int userId) {
 
 		//戻り値
 		boolean insert = true;
@@ -27,7 +25,7 @@ public class SpotModel{
 			//SpotDaoに接続
 			spotDao.connect();
 			//メソッド呼び出し
-			insert = spotDao.insert(spotBeans, userId, inputStream);
+			insert = spotDao.insert(spotBeans, userId);
 		}catch(Exception e){
 			insert = false;
 			e.printStackTrace();

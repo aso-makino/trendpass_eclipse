@@ -3,11 +3,17 @@ package beans;
 public class SpotBeans {
 	private String spotId;
 	private String spotName;
-	private double ratitude;//Å@à‹ìx
-	private double longitude; //Å@åoìx
+	private double ratitude;//ÔøΩ@ÔøΩ‹ìx
+	private double longitude; //ÔøΩ@ÔøΩoÔøΩx
 	private String genreId;
-	private String spotImage;
+	private String filename;
 
+	public String getFilename() {
+		return filename;
+	}
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
 	public String getSpotId() {
 		return spotId;
 	}
@@ -37,12 +43,6 @@ public class SpotBeans {
 	}
 	public void setGenreId(String genreId) {
 		this.genreId = genreId;
-	}
-	public String getSpotImage() {
-		return spotImage;
-	}
-	public void setSpotImage(String spotImage) {
-		this.spotImage = spotImage;
 	}
 
 }
