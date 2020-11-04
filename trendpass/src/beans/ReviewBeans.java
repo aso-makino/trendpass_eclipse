@@ -1,23 +1,23 @@
 package beans;
 
 public class ReviewBeans {
-	private String spotId;
-	private String reviewNumber;
+	private int spotId;
+	private int reviewNumber;
 	private String reviewContent;
 	private int evaluation;
 	private String reviewImage;
-	private String userId;
+	private int userId;
 
-	public String getSpotId() {
+	public int getSpotId() {
 		return spotId;
 	}
-	public void setSpotId(String spotId) {
+	public void setSpotId(int spotId) {
 		this.spotId = spotId;
 	}
-	public String getReviewNumber() {
+	public int getReviewNumber() {
 		return reviewNumber;
 	}
-	public void setReviewNumber(String reviewNumber) {
+	public void setReviewNumber(int reviewNumber) {
 		this.reviewNumber = reviewNumber;
 	}
 	public String getReviewContent() {
@@ -38,10 +38,10 @@ public class ReviewBeans {
 	public void setReviewImage(String reviewImage) {
 		this.reviewImage = reviewImage;
 	}
-	public String getUserId() {
+	public int getUserId() {
 		return userId;
 	}
-	public void setUserId(String userId) {
+	public void setUserId(int userId) {
 		this.userId = userId;
 	}
 
