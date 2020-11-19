@@ -24,6 +24,8 @@ public class FilterSpotDao extends DaoBase{
 										+ "FROM spot WHERE user_id = ?");
 
 			stmt.setString(1, userId);
+
+			System.out.println(stmt);
 			rs = stmt.executeQuery();
 
 			while( rs.next() ){
@@ -58,24 +60,37 @@ public class FilterSpotDao extends DaoBase{
 											+ "FROM spot WHERE spot_id = ?");
 
 				stmt.setString(1, spotReviewBeans.getSpotId());
+
+				System.out.println(stmt);
+
 				rs = stmt.executeQuery();
 
 				while( rs.next() ){
-					SpotReviewBeans resultBeans = new SpotReviewBeans();
 
-					resultBeans.setGenreId(rs.getString("genre_id"));
-					resultBeans.setLongitude(rs.getDouble("longitude"));
-					resultBeans.setRatitude(rs.getDouble("ratitude"));
-					resultBeans.setSpotId(rs.getString("spot_id"));
-					resultBeans.setSpotName(rs.getString("spot_name"));
+					spotReviewBeans.setGenreId(rs.getString("genre_id"));
+					spotReviewBeans.setLongitude(rs.getDouble("longitude"));
+					spotReviewBeans.setRatitude(rs.getDouble("ratitude"));
+					spotReviewBeans.setSpotName(rs.getString("spot_name"));
 
-					result.add(resultBeans);
 				}
 
 			}catch(SQLException e) {
 				e.printStackTrace();
 				throw e;
 			}
+		}
+
+		for(SpotReviewBeans i : result) {
+			System.out.println(i.getUserId());
+			System.out.println(i.getSpotId());
+			System.out.println(i.getReviewNumber());
+			System.out.println(i.getReviewContent());
+			System.out.println(i.getReviewImage());
+			System.out.println(i.getEvaluation());
+			System.out.println(i.getGenreId());
+			System.out.println(i.getLongitude());
+			System.out.println(i.getRatitude());
+			System.out.println(i.getSpotName());
 		}
 
 		return result;

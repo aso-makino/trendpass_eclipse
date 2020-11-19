@@ -72,8 +72,11 @@ public class MyPageServlet extends HttpServlet {
         	ObjectMapper mapper = new ObjectMapper();
         	Map<String, Object> resMap = new HashMap<>();
 
+        	resMap.put("spotSize",spotList.size());
         	resMap.put("spotList",spotList);
+        	resMap.put("reviewSize", spotReviewList.size());
         	resMap.put("spotReviewList",spotReviewList);
+
 
 			//　オブジェクトをJson文字列に変更
 			String resJson = mapper.writeValueAsString(resMap);

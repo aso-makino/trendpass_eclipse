@@ -22,6 +22,9 @@ public class ReviewDao extends DaoBase{
 			stmt = con.prepareStatement("SELECT * FROM review WHERE user_id = ?");
 
 			stmt.setString(1, userId);
+
+			System.out.println(stmt);
+
 			rs = stmt.executeQuery();
 
 			while( rs.next() ){
@@ -40,6 +43,19 @@ public class ReviewDao extends DaoBase{
 		}catch(SQLException e) {
 			e.printStackTrace();
 			throw e;
+		}
+
+		for(SpotReviewBeans i : list) {
+			System.out.println(i.getUserId());
+			System.out.println(i.getSpotId());
+			System.out.println(i.getReviewNumber());
+			System.out.println(i.getReviewContent());
+			System.out.println(i.getReviewImage());
+			System.out.println(i.getEvaluation());
+			System.out.println(i.getGenreId());
+			System.out.println(i.getLongitude());
+			System.out.println(i.getRatitude());
+			System.out.println(i.getSpotName());
 		}
 
 		return list;
