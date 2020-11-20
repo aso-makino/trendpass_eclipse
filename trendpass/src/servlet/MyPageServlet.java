@@ -19,9 +19,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import beans.ReviewBeans;
 import beans.SpotBeans;
 import beans.SpotReviewBeans;
+import beans.UserBeans;
 import exception.DBConnectException;
 import model.FilterSpotModel;
 import model.ReviewModel;
+import model.UserModel;
 
 
 @WebServlet("/MyPageServlet")
@@ -43,6 +45,17 @@ public class MyPageServlet extends HttpServlet {
         	FilterSpotModel filterSpotModel = new FilterSpotModel();
         	ReviewModel reviewModel = new ReviewModel();
 
+        	// getUserInfo
+        	UserModel userModel = new UserModel();
+        	UserBeans userInfo = null;
+        	try {
+				userInfo = userModel.getBy(userId);
+
+        	} catch (DBConnectException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 
         	// getMySpotList
         	List<SpotBeans> spotList = null;
@@ -72,6 +85,7 @@ public class MyPageServlet extends HttpServlet {
         	ObjectMapper mapper = new ObjectMapper();
         	Map<String, Object> resMap = new HashMap<>();
 
+        	resMap.put("userInfo",userInfo);
         	resMap.put("spotSize",spotList.size());
         	resMap.put("spotList",spotList);
         	resMap.put("reviewSize", spotReviewList.size());
