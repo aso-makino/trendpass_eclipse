@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import beans.SpotBeans;
 import beans.SpotReviewBeans;
 
 public class ReviewDao extends DaoBase{
@@ -22,8 +23,6 @@ public class ReviewDao extends DaoBase{
 			stmt = con.prepareStatement("SELECT * FROM review WHERE user_id = ?");
 
 			stmt.setString(1, userId);
-
-			System.out.println(stmt);
 
 			rs = stmt.executeQuery();
 
@@ -45,20 +44,36 @@ public class ReviewDao extends DaoBase{
 			throw e;
 		}
 
-		for(SpotReviewBeans i : list) {
-			System.out.println(i.getUserId());
-			System.out.println(i.getSpotId());
-			System.out.println(i.getReviewNumber());
-			System.out.println(i.getReviewContent());
-			System.out.println(i.getReviewImage());
-			System.out.println(i.getEvaluation());
-			System.out.println(i.getGenreId());
-			System.out.println(i.getLongitude());
-			System.out.println(i.getRatitude());
-			System.out.println(i.getSpotName());
+		return list;
+	}
+
+	public List<SpotBeans> getSpotImage(List<SpotBeans> list) throws SQLException{
+
+		List<SpotBeans> result = new ArrayList<SpotBeans>(list);
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		for(SpotBeans spotBean : list) {
+			try {
+				stmt = con.prepareStatement("SELECT review_image FROM review "
+											+ "WHERE spot_id = ? "
+											+ "AND review_number = (SELECT MAX(review_number) FROM review WHERE spot_id = ?)");
+
+				stmt.setString(1, spotBean.getSpotId());
+				stmt.setString(2, spotBean.getSpotId());
+				rs = stmt.executeQuery();
+
+				while( rs.next() ){
+					spotBean.setSpotImage(rs.getString("review_image"));
+				}
+
+			}catch(SQLException e) {
+				e.printStackTrace();
+				throw e;
+			}
 		}
 
-		return list;
+		return result;
 	}
 
 }

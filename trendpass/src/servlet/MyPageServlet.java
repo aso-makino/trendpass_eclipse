@@ -62,6 +62,7 @@ public class MyPageServlet extends HttpServlet {
 
 			try {
 				spotList = filterSpotModel.getMySpotList(userId);
+				spotList = reviewModel.getSpotImage(spotList);
 			} catch (DBConnectException e) {
 				e.printStackTrace();
 			}catch(SQLException e){
