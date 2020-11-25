@@ -1,11 +1,10 @@
 package beans;
 
-import java.awt.image.BufferedImage;
 
 public class LoginBeans {
 	private String userId;
 	private String userName;
-	private BufferedImage userIcon;
+	private String userIcon;
 
 	public String getUserId() {
 		return userId;
@@ -19,10 +18,10 @@ public class LoginBeans {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public BufferedImage getUserIcon() {
+	public String getUserIcon() {
 		return userIcon;
 	}
-	public void setUserIcon(BufferedImage userIcon) {
+	public void setUserIcon(String userIcon) {
 		this.userIcon = userIcon;
 	}
 
