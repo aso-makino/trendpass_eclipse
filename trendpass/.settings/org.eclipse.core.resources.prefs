@@ -1,2 +1,4 @@
 eclipse.preferences.version=1
+encoding//src/model/LoginModel.java=UTF-8
+encoding//src/servlet/AuthServlet.java=UTF-8
 encoding//src/dao/FilterSpotDao.java=UTF-8

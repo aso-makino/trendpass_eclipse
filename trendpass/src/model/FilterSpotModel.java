@@ -17,14 +17,14 @@ public class FilterSpotModel {
 		List<SpotBeans> list = new ArrayList<SpotBeans>();
 
 		try{
-			//@Ú‘±
+			//ï¿½@ï¿½Ú‘ï¿½
 			filterSpotDao.connect();
 
-			//@ŒŸõŒ‹‰Ê‚Ìæ“¾
+			//ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê‚Ìæ“¾
 	        list = filterSpotDao.getMySpotList(userId);
 
 		}catch(SQLException e) {
-			//@ƒGƒ‰[”­¶‚µ‚½ê‡‚ÉƒRƒ“ƒ\[ƒ‹‚ÉƒƒO‚ğo—Í‚·‚é
+			//ï¿½@ï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÉƒRï¿½ï¿½ï¿½\ï¿½[ï¿½ï¿½ï¿½Éƒï¿½ï¿½Oï¿½ï¿½ï¿½oï¿½Í‚ï¿½ï¿½ï¿½
 			e.printStackTrace();
 			throw e;
 
@@ -33,7 +33,7 @@ public class FilterSpotModel {
 			throw e;
 
 		}finally {
-			//@Ú‘±iƒRƒlƒNƒVƒ‡ƒ“)‚ğ•Â‚¶‚é
+			//ï¿½@ï¿½Ú‘ï¿½ï¿½iï¿½Rï¿½lï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½Â‚ï¿½ï¿½ï¿½
 			filterSpotDao.close();
 		}
 
@@ -47,14 +47,14 @@ public class FilterSpotModel {
 		List<SpotReviewBeans> result = new ArrayList<SpotReviewBeans>(list);
 
 		try{
-			//@Ú‘±
+			//ï¿½@ï¿½Ú‘ï¿½
 			filterSpotDao.connect();
 
-			//@ŒŸõŒ‹‰Ê‚Ìæ“¾
+			//ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê‚Ìæ“¾
 	        result = filterSpotDao.getMySpotReviewList(list);
 
 		}catch(SQLException e) {
-			//@ƒGƒ‰[”­¶‚µ‚½ê‡‚ÉƒRƒ“ƒ\[ƒ‹‚ÉƒƒO‚ğo—Í‚·‚é
+			//ï¿½@ï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÉƒRï¿½ï¿½ï¿½\ï¿½[ï¿½ï¿½ï¿½Éƒï¿½ï¿½Oï¿½ï¿½ï¿½oï¿½Í‚ï¿½ï¿½ï¿½
 			e.printStackTrace();
 			throw e;
 
@@ -63,10 +63,66 @@ public class FilterSpotModel {
 			throw e;
 
 		}finally {
-			//@Ú‘±iƒRƒlƒNƒVƒ‡ƒ“)‚ğ•Â‚¶‚é
+			//ï¿½@ï¿½Ú‘ï¿½ï¿½iï¿½Rï¿½lï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½Â‚ï¿½ï¿½ï¿½
 			filterSpotDao.close();
 		}
 
 		return result;
+	}
+
+	public List<SpotBeans> getList(String userId,double latitude, double longitude) throws SystemErrException{
+
+		List<SpotBeans> spotListBeans = new ArrayList<SpotBeans>();
+		FilterSpotDao filterSpotDao = new FilterSpotDao();
+
+		try{
+			//ã€€æ¥ç¶š
+			filterSpotDao.connect();
+
+			//ã€€æ¤œç´¢çµæœã®å–å¾—
+		    spotListBeans = filterSpotDao.getList(userId,latitude,longitude);
+
+		}catch(SQLException e) {
+			//ã€€ã‚¨ãƒ©ãƒ¼ç™ºç”Ÿã—ãŸå ´åˆã«ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ã«ãƒ­ã‚°ã‚’å‡ºåŠ›ã™ã‚‹
+			e.printStackTrace();
+			throw new SystemErrException(e);
+
+		}catch(DBConnectException e) {
+			e.printStackTrace();
+			throw new SystemErrException(e);
+
+		}finally {
+			//ã€€æ¥ç¶šï¼ˆã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ï¼‰ã‚’é–‰ã˜ã‚‹
+			filterSpotDao.close();
+		}
+
+		return spotListBeans;
+	}
+
+
+	public List<SpotBeans> getSortList(double latitude, double longitude, SortBeans sortBeans, Map<String, Boolean> sortMap) throws SystemErrException {
+		List<SpotBeans> sortListBeans = new ArrayList<SpotBeans>();
+		FilterSpotDao filterSpotDao = new FilterSpotDao();
+		try{
+			//ã€€æ¥ç¶š
+			filterSpotDao.connect();
+
+			//ã€€æ¤œç´¢çµæœã®å–å¾—
+		    sortListBeans = filterSpotDao.getSortList(latitude,longitude,sortBeans,sortMap);
+
+		}catch(SQLException e) {
+			//ã€€ã‚¨ãƒ©ãƒ¼ç™ºç”Ÿã—ãŸå ´åˆã«ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ã«ãƒ­ã‚°ã‚’å‡ºåŠ›ã™ã‚‹
+			e.printStackTrace();
+			throw new SystemErrException(e);
+
+		}catch(DBConnectException e) {
+			e.printStackTrace();
+			throw new SystemErrException(e);
+
+		}finally {
+			//ã€€æ¥ç¶šï¼ˆã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ï¼‰ã‚’é–‰ã˜ã‚‹
+			filterSpotDao.close();
+		}
+		return sortListBeans;
 	}
 }

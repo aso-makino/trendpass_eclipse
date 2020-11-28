@@ -17,14 +17,14 @@ public class ReviewModel {
 		List<SpotReviewBeans> list = new ArrayList<SpotReviewBeans>();
 
 		try{
-			//@Ú‘±
+			//ï¿½@ï¿½Ú‘ï¿½
 			reviewDao.connect();
 
-			//@ŒŸõŒ‹‰Ê‚Ìæ“¾
+			//ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê‚Ìæ“¾
 	        list = reviewDao.getMyReviewList(userId);
 
 		}catch(SQLException e) {
-			//@ƒGƒ‰[”­¶‚µ‚½ê‡‚ÉƒRƒ“ƒ\[ƒ‹‚ÉƒƒO‚ğo—Í‚·‚é
+			//ï¿½@ï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÉƒRï¿½ï¿½ï¿½\ï¿½[ï¿½ï¿½ï¿½Éƒï¿½ï¿½Oï¿½ï¿½ï¿½oï¿½Í‚ï¿½ï¿½ï¿½
 			e.printStackTrace();
 			throw e;
 
@@ -33,7 +33,7 @@ public class ReviewModel {
 			throw e;
 
 		}finally {
-			//@Ú‘±iƒRƒlƒNƒVƒ‡ƒ“)‚ğ•Â‚¶‚é
+			//ï¿½@ï¿½Ú‘ï¿½ï¿½iï¿½Rï¿½lï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½Â‚ï¿½ï¿½ï¿½
 			reviewDao.close();
 		}
 
@@ -47,14 +47,14 @@ public class ReviewModel {
 		List<SpotBeans> result = new ArrayList<SpotBeans>(list);
 
 		try{
-			//@Ú‘±
+			//ï¿½@ï¿½Ú‘ï¿½
 			reviewDao.connect();
 
-			//@ŒŸõŒ‹‰Ê‚Ìæ“¾
+			//ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê‚Ìæ“¾
 	        result = reviewDao.getSpotImage(list);
 
 		}catch(SQLException e) {
-			//@ƒGƒ‰[”­¶‚µ‚½ê‡‚ÉƒRƒ“ƒ\[ƒ‹‚ÉƒƒO‚ğo—Í‚·‚é
+			//ï¿½@ï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÉƒRï¿½ï¿½ï¿½\ï¿½[ï¿½ï¿½ï¿½Éƒï¿½ï¿½Oï¿½ï¿½ï¿½oï¿½Í‚ï¿½ï¿½ï¿½
 			e.printStackTrace();
 			throw e;
 
@@ -63,7 +63,7 @@ public class ReviewModel {
 			throw e;
 
 		}finally {
-			//@Ú‘±iƒRƒlƒNƒVƒ‡ƒ“)‚ğ•Â‚¶‚é
+			//ï¿½@ï¿½Ú‘ï¿½ï¿½iï¿½Rï¿½lï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½Â‚ï¿½ï¿½ï¿½
 			reviewDao.close();
 		}
 
@@ -72,4 +72,31 @@ public class ReviewModel {
 	}
 
 
+	public List<SpotBeans> getImage(String userId ) throws SystemErrException{
+
+		ReviewDao revDao = new ReviewDao();
+		List<SpotBeans> spotList = new ArrayList<SpotBeans>();
+		try{
+			//ã€€æ¥ç¶š
+			revDao.connect();
+
+			//ã€€æ¤œç´¢çµæœã®å–å¾—
+		    spotList = revDao.getImage(userId);
+
+		}catch(SQLException e) {
+			//ã€€ã‚¨ãƒ©ãƒ¼ç™ºç”Ÿã—ãŸå ´åˆã«ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ã«ãƒ­ã‚°ã‚’å‡ºåŠ›ã™ã‚‹
+			e.printStackTrace();
+			throw new SystemErrException(e);
+
+		}catch(DBConnectException e) {
+			e.printStackTrace();
+			throw new SystemErrException(e);
+
+		}finally {
+			//ã€€æ¥ç¶šï¼ˆã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ï¼‰ã‚’é–‰ã˜ã‚‹
+			revDao.close();
+		}
+
+		return spotList;
+	}
 }
