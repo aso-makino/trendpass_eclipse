@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 public class UserBeans {
 	private String userId;
 	private String userName;
-	private BufferedImage userIcon;
+	private String userIcon;
 	private String mail;
 	private String sex;
 	private int birth;
@@ -22,10 +22,10 @@ public class UserBeans {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public BufferedImage getUserIcon() {
+	public String getUserIcon() {
 		return userIcon;
 	}
-	public void setUserIcon(BufferedImage userIcon) {
+	public void setUserIcon(String userIcon) {
 		this.userIcon = userIcon;
 	}
 	public String getMail() {
