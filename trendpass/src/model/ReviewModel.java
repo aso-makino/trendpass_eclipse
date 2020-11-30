@@ -8,6 +8,7 @@ import beans.SpotBeans;
 import beans.SpotReviewBeans;
 import dao.ReviewDao;
 import exception.DBConnectException;
+import exception.SystemErrException;
 
 public class ReviewModel {
 
@@ -17,14 +18,14 @@ public class ReviewModel {
 		List<SpotReviewBeans> list = new ArrayList<SpotReviewBeans>();
 
 		try{
-			//�@�ڑ�
+			//�ｿｽ@�ｿｽﾚ托ｿｽ
 			reviewDao.connect();
 
-			//�@�������ʂ̎擾
+			//�ｿｽ@�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾊの取得
 	        list = reviewDao.getMyReviewList(userId);
 
 		}catch(SQLException e) {
-			//�@�G���[���������ꍇ�ɃR���\�[���Ƀ��O���o�͂���
+			//�ｿｽ@�ｿｽG�ｿｽ�ｿｽ�ｿｽ[�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ鼾�ｿｽﾉコ�ｿｽ�ｿｽ�ｿｽ\�ｿｽ[�ｿｽ�ｿｽ�ｿｽﾉ�ｿｽ�ｿｽO�ｿｽ�ｿｽ�ｿｽo�ｿｽﾍゑｿｽ�ｿｽ�ｿｽ
 			e.printStackTrace();
 			throw e;
 
@@ -33,7 +34,7 @@ public class ReviewModel {
 			throw e;
 
 		}finally {
-			//�@�ڑ��i�R�l�N�V����)�����
+			//�ｿｽ@�ｿｽﾚ托ｿｽ�ｿｽi�ｿｽR�ｿｽl�ｿｽN�ｿｽV�ｿｽ�ｿｽ�ｿｽ�ｿｽ)�ｿｽ�ｿｽﾂゑｿｽ�ｿｽ�ｿｽ
 			reviewDao.close();
 		}
 
@@ -47,14 +48,14 @@ public class ReviewModel {
 		List<SpotBeans> result = new ArrayList<SpotBeans>(list);
 
 		try{
-			//�@�ڑ�
+			//�ｿｽ@�ｿｽﾚ托ｿｽ
 			reviewDao.connect();
 
-			//�@�������ʂ̎擾
+			//�ｿｽ@�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾊの取得
 	        result = reviewDao.getSpotImage(list);
 
 		}catch(SQLException e) {
-			//�@�G���[���������ꍇ�ɃR���\�[���Ƀ��O���o�͂���
+			//�ｿｽ@�ｿｽG�ｿｽ�ｿｽ�ｿｽ[�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ鼾�ｿｽﾉコ�ｿｽ�ｿｽ�ｿｽ\�ｿｽ[�ｿｽ�ｿｽ�ｿｽﾉ�ｿｽ�ｿｽO�ｿｽ�ｿｽ�ｿｽo�ｿｽﾍゑｿｽ�ｿｽ�ｿｽ
 			e.printStackTrace();
 			throw e;
 
@@ -63,7 +64,7 @@ public class ReviewModel {
 			throw e;
 
 		}finally {
-			//�@�ڑ��i�R�l�N�V����)�����
+			//�ｿｽ@�ｿｽﾚ托ｿｽ�ｿｽi�ｿｽR�ｿｽl�ｿｽN�ｿｽV�ｿｽ�ｿｽ�ｿｽ�ｿｽ)�ｿｽ�ｿｽﾂゑｿｽ�ｿｽ�ｿｽ
 			reviewDao.close();
 		}
 
@@ -76,15 +77,16 @@ public class ReviewModel {
 
 		ReviewDao revDao = new ReviewDao();
 		List<SpotBeans> spotList = new ArrayList<SpotBeans>();
+		/*
 		try{
-			//　接続
+			//縲�謗･邯�
 			revDao.connect();
 
-			//　検索結果の取得
+			//縲�讀懃ｴ｢邨先棡縺ｮ蜿門ｾ�
 		    spotList = revDao.getImage(userId);
 
 		}catch(SQLException e) {
-			//　エラー発生した場合にコンソールにログを出力する
+			//縲�繧ｨ繝ｩ繝ｼ逋ｺ逕溘＠縺溷�ｴ蜷医↓繧ｳ繝ｳ繧ｽ繝ｼ繝ｫ縺ｫ繝ｭ繧ｰ繧貞�ｺ蜉帙☆繧�
 			e.printStackTrace();
 			throw new SystemErrException(e);
 
@@ -93,10 +95,10 @@ public class ReviewModel {
 			throw new SystemErrException(e);
 
 		}finally {
-			//　接続（コネクション）を閉じる
+			//縲�謗･邯夲ｼ医さ繝阪け繧ｷ繝ｧ繝ｳ�ｼ峨ｒ髢峨§繧�
 			revDao.close();
 		}
-
+		*/
 		return spotList;
 	}
 }
