@@ -71,34 +71,4 @@ public class ReviewModel {
 		return result;
 
 	}
-
-
-	public List<SpotBeans> getImage(String userId ) throws SystemErrException{
-
-		ReviewDao revDao = new ReviewDao();
-		List<SpotBeans> spotList = new ArrayList<SpotBeans>();
-		/*
-		try{
-			//縲�謗･邯�
-			revDao.connect();
-
-			//縲�讀懃ｴ｢邨先棡縺ｮ蜿門ｾ�
-		    spotList = revDao.getImage(userId);
-
-		}catch(SQLException e) {
-			//縲�繧ｨ繝ｩ繝ｼ逋ｺ逕溘＠縺溷�ｴ蜷医↓繧ｳ繝ｳ繧ｽ繝ｼ繝ｫ縺ｫ繝ｭ繧ｰ繧貞�ｺ蜉帙☆繧�
-			e.printStackTrace();
-			throw new SystemErrException(e);
-
-		}catch(DBConnectException e) {
-			e.printStackTrace();
-			throw new SystemErrException(e);
-
-		}finally {
-			//縲�謗･邯夲ｼ医さ繝阪け繧ｷ繝ｧ繝ｳ�ｼ峨ｒ髢峨§繧�
-			revDao.close();
-		}
-		*/
-		return spotList;
-	}
 }

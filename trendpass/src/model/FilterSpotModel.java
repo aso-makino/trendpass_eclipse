@@ -3,11 +3,14 @@ package model;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import beans.SortBeans;
 import beans.SpotBeans;
 import beans.SpotReviewBeans;
 import dao.FilterSpotDao;
 import exception.DBConnectException;
+import exception.SystemErrException;
 
 public class FilterSpotModel {
 
@@ -72,7 +75,7 @@ public class FilterSpotModel {
 
 	public List<SpotBeans> getList(String userId,double latitude, double longitude) throws SystemErrException{
 
-		List<SpotBeans> spotListBeans = new ArrayList<SpotBeans>();
+		List<SpotBeans> spotList = new ArrayList<SpotBeans>();
 		FilterSpotDao filterSpotDao = new FilterSpotDao();
 
 		try{
@@ -80,7 +83,7 @@ public class FilterSpotModel {
 			filterSpotDao.connect();
 
 			//　検索結果の取得
-		    spotListBeans = filterSpotDao.getList(userId,latitude,longitude);
+		    spotList = filterSpotDao.getList(userId,latitude,longitude);
 
 		}catch(SQLException e) {
 			//　エラー発生した場合にコンソールにログを出力する
@@ -96,7 +99,7 @@ public class FilterSpotModel {
 			filterSpotDao.close();
 		}
 
-		return spotListBeans;
+		return spotList;
 	}
 
 
