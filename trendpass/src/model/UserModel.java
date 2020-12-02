@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import beans.UserBeans;
 import dao.UserDao;
 import exception.DBConnectException;
+import utils.DeleteImageFile;
 
 public class UserModel {
 
@@ -53,6 +54,8 @@ public class UserModel {
 			userDao.connect();
 
 			//@‰ïˆõî•ñ‚Ì“o˜^
+			String fileName = userDao.getUserIcon(userBeans.getUserId());
+			DeleteImageFile.delete(fileName);
 			result = userDao.update(userBeans);
 
 

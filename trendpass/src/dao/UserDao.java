@@ -167,7 +167,37 @@ public class UserDao extends DaoBase {
 			throw e;
 		}
 		return userBeans;
+	}
 
+	public String getUserIcon(String userId) throws SQLException{
+
+		if(con == null) {
+			return null;
+		}
+
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String userIcon = null;
+
+		try {
+			////////////////////
+		    //SELECT文
+			stmt = con.prepareStatement("SELECT user_icon FROM user WHERE user_id = ?");
+
+			/////////////////////////////////
+			//　値をセット
+			stmt.setString(1,userId);
+			rs = stmt.executeQuery();
+
+			while( rs.next() ) {
+				userIcon = rs.getString("user_icon");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return userIcon;
 	}
 
 }
