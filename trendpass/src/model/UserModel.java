@@ -40,11 +40,12 @@ public class UserModel {
 
 	}
 
-	public boolean mailCheck(String mail) throws SQLException, DBConnectException{
+	public boolean update(UserBeans userBeans) throws SQLException, DBConnectException{
 
 		//diaryDao¶¬
 		UserDao userDao = new UserDao();
-		boolean result =false;
+		boolean result = false;
+
 
 		try {
 			////////////////////
@@ -52,7 +53,7 @@ public class UserModel {
 			userDao.connect();
 
 			//@‰ïˆõî•ñ‚Ì“o˜^
-			result = userDao.mailCheck(mail);
+			result = userDao.update(userBeans);
 
 
 		}catch(SQLException e) {
@@ -68,6 +69,68 @@ public class UserModel {
 
 		}
 		return result;
+
+	}
+
+	public boolean mailCheck(String mail ,String userId) throws SQLException, DBConnectException{
+
+		//diaryDao¶¬
+		UserDao userDao = new UserDao();
+		boolean result =false;
+
+		try {
+			////////////////////
+			//DBÚ‘±
+			userDao.connect();
+
+			//@‰ïˆõî•ñ‚Ì“o˜^
+			result = userDao.mailCheck(mail,userId);
+
+
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}catch(DBConnectException e) {
+			e.printStackTrace();
+			throw e;
+		}
+		finally {
+			userDao.close();
+
+
+		}
+		return result;
+
+	}
+
+	public UserBeans getUserInfo(String userId) throws SQLException, DBConnectException{
+
+		//diaryDao¶¬
+		UserDao userDao = new UserDao();
+		UserBeans userBeans = new UserBeans();
+
+		try {
+			////////////////////
+			//DBÚ‘±
+			userDao.connect();
+
+			//@‰ïˆõî•ñ‚Ì“o˜^
+			userBeans = userDao.getUserInfo(userId);
+
+
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}catch(DBConnectException e) {
+			e.printStackTrace();
+			throw e;
+		}
+		finally {
+			userDao.close();
+
+
+		}
+		return userBeans;
 
 	}
 }

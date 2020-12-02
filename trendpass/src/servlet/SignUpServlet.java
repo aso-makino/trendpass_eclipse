@@ -35,8 +35,6 @@ public void doPost(HttpServletRequest request,HttpServletResponse response)
 
     	if ("/SignUp".equals(request.getServletPath())){
 
-    		System.out.println("3");
-
     		request.setCharacterEncoding( "UTF-8" );
 
     		String userName = null;

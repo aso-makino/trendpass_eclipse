@@ -49,7 +49,50 @@ public class UserDao extends DaoBase {
 
 	}
 
-	public boolean mailCheck(String mail) throws SQLException{
+	public boolean update(UserBeans userBeans) throws SQLException{
+
+		if(con == null) {
+			return false;
+		}
+
+		PreparedStatement stmt = null;
+		boolean result = false;
+
+
+
+		try {
+			////////////////////
+		    //INSERT文
+			stmt = con.prepareStatement("UPDATE user SET "
+					+ "user_name = ?,user_icon = ?,mail = ?,password = ?,sex = ?,birth = ? "
+					+ "WHERE user_id = ? ");
+
+			/////////////////////////////////
+			//　値をセット
+			stmt.setString(1,userBeans.getUserName());
+			stmt.setString(2,userBeans.getUserIcon());
+			stmt.setString(3,userBeans.getMail());
+			stmt.setString(4,userBeans.getPassword());
+			stmt.setInt(5,userBeans.getSex());
+			stmt.setInt(6,userBeans.getBirth());
+			stmt.setString(7, userBeans.getUserId());
+			int count = stmt.executeUpdate();
+
+			if(count == 1) {
+				result = true;
+			}
+
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return result;
+
+	}
+
+
+	public boolean mailCheck(String mail,String userId) throws SQLException{
 
 		if(con == null) {
 			return false;
@@ -64,11 +107,12 @@ public class UserDao extends DaoBase {
 		try {
 			////////////////////
 		    //SELECT文
-			stmt = con.prepareStatement("SELECT COUNT(*) as count FROM user WHERE mail = ?");
+			stmt = con.prepareStatement("SELECT COUNT(*) as count FROM user WHERE mail = ? AND user_id <> ?");
 
 			/////////////////////////////////
 			//　値をセット
 			stmt.setString(1,mail);
+			stmt.setString(2,userId);
 			rs = stmt.executeQuery();
 
 			while( rs.next() ) {
@@ -84,6 +128,45 @@ public class UserDao extends DaoBase {
 			throw e;
 		}
 		return result;
+
+	}
+
+	public UserBeans getUserInfo(String userId) throws SQLException{
+
+		if(con == null) {
+			return null;
+		}
+
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		UserBeans userBeans = null;
+
+
+		try {
+			////////////////////
+		    //SELECT文
+			stmt = con.prepareStatement("SELECT * FROM user WHERE user_id = ?");
+
+			/////////////////////////////////
+			//　値をセット
+			stmt.setString(1,userId);
+			rs = stmt.executeQuery();
+
+			while( rs.next() ) {
+				userBeans = new UserBeans();
+				userBeans.setUserName(rs.getString("user_name"));
+				userBeans.setUserIcon(rs.getString("user_icon"));
+				userBeans.setMail(rs.getString("mail"));
+				userBeans.setSex(rs.getInt("sex"));
+				userBeans.setBirth(rs.getInt("birth"));
+			}
+
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return userBeans;
 
 	}
 
