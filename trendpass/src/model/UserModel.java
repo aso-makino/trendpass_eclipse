@@ -53,9 +53,20 @@ public class UserModel {
 			//DB接続
 			userDao.connect();
 
+
+			// user_iconが指定されていない場合、DBに保存されている値にする
+			// user_iconが指定されている場合、サーバーにアップされていたファイルを削除
+
+			String fileName = userDao.getUserIcon(userBeans.getUserId()); //DBに格納されているuser_iconのパスを取得
+			System.out.println(userBeans.getUserIcon());
+			System.out.println(userBeans.getUserIcon().isEmpty());
+			if(userBeans.getUserIcon().isEmpty()) {
+				userBeans.setUserIcon(fileName);
+			}else {
+				DeleteImageFile.delete(fileName);
+			}
+
 			//　会員情報の登録
-			String fileName = userDao.getUserIcon(userBeans.getUserId());
-			DeleteImageFile.delete(fileName);
 			result = userDao.update(userBeans);
 
 

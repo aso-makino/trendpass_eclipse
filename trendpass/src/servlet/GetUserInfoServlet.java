@@ -29,6 +29,7 @@ public class GetUserInfoServlet extends HttpServlet {
 	public void doPost(HttpServletRequest request,HttpServletResponse response)
 			throws ServletException, IOException{
 
+		System.out.println("GetUser!!!");
 
 	    	if ("/GetUserInfo".equals(request.getServletPath())){
 

@@ -19,9 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.UserBeans;
@@ -30,7 +27,7 @@ import model.UserModel;
 import java.io.File;
 
 @WebServlet("/SignChange")
-@MultipartConfig(location = "C:/Users/neco2/output_imgfile")
+@MultipartConfig(location = "C:/Users/neco2/temporary_image")
 public class SignChangeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -42,8 +39,7 @@ public class SignChangeServlet extends HttpServlet {
 
 			request.setCharacterEncoding("utf-8");
 
-			System.out.println("2");
-			String name="no_name";
+			String name="null";
 			String userId = null;
 			String userName = null;
   			String userMail = null;
@@ -73,7 +69,7 @@ public class SignChangeServlet extends HttpServlet {
 	                    //　画像ファイル名に日付を追加し、保存
 	                    StringBuilder sb = new StringBuilder(f.getName());
 	                    name = sb.insert(sb.indexOf(".")-1, df.format(date)).toString();
-	                    part.write(name);
+	                    part.write("C:/Users/neco2/output_imgfile/" + name);
 	                }
 
 	                if(str.startsWith("name=\"description\"")) {

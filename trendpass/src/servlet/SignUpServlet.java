@@ -2,99 +2,129 @@ package servlet;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import javax.servlet.http.Part;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.UserBeans;
 import exception.DBConnectException;
 import model.UserModel;
+import java.io.File;
 
 @WebServlet("/SignUp")
+@MultipartConfig(location = "C:/Users/neco2/temporary_image")
 public class SignUpServlet extends HttpServlet {
-
 	private static final long serialVersionUID = 1L;
 
-public void doPost(HttpServletRequest request,HttpServletResponse response)
-		throws ServletException, IOException{
+	public void doPost(HttpServletRequest request,HttpServletResponse response)
+			throws ServletException, IOException{
 
 
-    	if ("/SignUp".equals(request.getServletPath())){
+		if ("/SignUp".equals(request.getServletPath())){
 
-    		request.setCharacterEncoding( "UTF-8" );
+			request.setCharacterEncoding("utf-8");
 
-    		String userName = null;
+			String name= null;
+			String userId = null;
+			String userName = null;
   			String userMail = null;
   			String password = null;
   			String sexString;
   			int sex = 0;
   			int birth = 0;
-  			String userIcon = null;
 
-    	    try{
-    	    	//. JSON ƒeƒLƒXƒg‚ğ‘S•”æ‚èo‚·
-    	    	BufferedReader br = new BufferedReader( request.getReader() );
-    	      	String jsonText = br.readLine();
-    	      	System.out.println( jsonText );
+			try {
+	        //multipart/form-dataã«ã‚ˆã£ã¦æä¾›ã•ã‚Œã‚‹ã“ã®ãƒªã‚¯ã‚¨ã‚¹ãƒˆã®ã™ã¹ã¦ã®Partè¦ç´ ã‚’å–å¾—
+	        for (Part part : request.getParts()) {
+	        	System.out.println("part::" + part);
+	            //ã€€åå‰ã®å–å¾—
+	            for (String cd : part.getHeader("Content-Disposition").split(";")) {
+	                String str = cd.trim();
+	                System.out.println("str::" + str);
 
-    	      	//. JSON ƒIƒuƒWƒFƒNƒg‚É•ÏŠ·
-    	      	JSONParser parser = new JSONParser();
-    	      	JSONObject jsonObj = (JSONObject)parser.parse(jsonText);
 
-    	      	userName  = ( String )jsonObj.get("userName");
-      			userMail  = ( String )jsonObj.get("userMail");
-      			password  = ( String )jsonObj.get("password");
-      			sexString  = ( String )jsonObj.get("sex");
 
-      			switch (sexString){
-                case "’j«":
-                    sex = 1;
-                    break;
-                case "—«":
-                	sex = 2;
-                    break;
-                case "–¢‘I‘ğ":
-                	sex = 3;
-                    break;
-            }
-      			birth  = Integer.parseInt(( String )jsonObj.get("birth"));
-      		userIcon  = ( String )jsonObj.get("userIcon");
+	                if(str.startsWith("filename")) {
+	                    String str2 = str.substring(cd.indexOf('=') + 1).trim().replace("\"", "");
+	                    File f = new File(str2);
 
-    	    }catch( Exception e ){
-    	   		e.printStackTrace();
-    	    }
+	                    final DateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSS");
+	                    final Date date = new Date(System.currentTimeMillis());
 
-    		//@ƒwƒbƒ_î•ñ‚È‚ÇƒZƒbƒg
-    		response.setContentType("application/json");
-    		response.setHeader("Cache-Control", "nocache");
-    		response.setCharacterEncoding("utf-8");
+	                    //ã€€ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«åã«æ—¥ä»˜ã‚’è¿½åŠ ã—ã€ä¿å­˜
+	                    StringBuilder sb = new StringBuilder(f.getName());
+	                    name = sb.insert(sb.indexOf(".")-1, df.format(date)).toString();
+	                    part.write("C:/Users/neco2/output_imgfile/" + name);
+	                }
+
+	                if(str.startsWith("name=\"description\"")) {
+	                	InputStream inputStream = part.getInputStream();
+	                    BufferedReader br = new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
+	                    String jsonText = br.readLine();
+
+	                    jsonText = jsonText.trim().replace("{", "").replace("}", "").replace(":", "").replace("\"", "").trim();
+	                    String[] userInfo = jsonText.split(",", 0);
+
+	                    userId = userInfo[0].replace("userId", "").trim();
+	                    userName  = userInfo[1].replace("userName", "").trim();
+	          			userMail  = userInfo[2].replace("mail", "").trim();
+	          			password  = userInfo[3].replace("password", "").trim();
+	          			sexString  = userInfo[4].replace("sex", "").trim();
+	          			birth  = Integer.parseInt(userInfo[5].replace("birth", "").trim());
+
+	          			System.out.println(userId);
+	          			System.out.println(userName);
+	          			System.out.println(userMail);
+	          			System.out.println(password);
+	          			System.out.println(sexString);
+	          			System.out.println(birth);
+
+
+	          			switch (sexString){
+	                    case "ç”·æ€§":
+	                        sex = 1;
+	                        break;
+	                    case "å¥³æ€§":
+	                    	sex = 2;
+	                        break;
+	                    case "æœªé¸æŠ":
+	                    	sex = 3;
+	                        break;
+	          			}
+	                }
+	            }
+	        }
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 
     		ObjectMapper mapper = new ObjectMapper();
 
     		UserModel userModel = new UserModel();
-
     		UserBeans userBeans = new UserBeans();
 
+    		userBeans.setUserId(userId);
     		userBeans.setUserName(userName);
+    		userBeans.setUserIcon(name);
     		userBeans.setMail(userMail);
     		userBeans.setPassword(password);
     		userBeans.setSex(sex);
     		userBeans.setBirth(birth);
-    		userBeans.setUserIcon(userIcon);
 
     		boolean result = false;
 
@@ -105,11 +135,15 @@ public void doPost(HttpServletRequest request,HttpServletResponse response)
 			}
 
 
+			//ï¿½@ï¿½wï¿½bï¿½_ï¿½ï¿½ï¿½È‚ÇƒZï¿½bï¿½g
+    		response.setContentType("application/json");
+    		response.setHeader("Cache-Control", "nocache");
+    		response.setCharacterEncoding("utf-8");
 
     		Map<String, Object> resMap = new HashMap<>();
     		resMap.put("result",result);
 
-    		//@ƒIƒuƒWƒFƒNƒg‚ğJson•¶š—ñ‚É•ÏX
+    		//ï¿½@ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½Jsonï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É•ÏX
     		String resJson = mapper.writeValueAsString(resMap);
 
     		PrintWriter outPW = response.getWriter();

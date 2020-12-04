@@ -79,7 +79,6 @@ public class DisplayImageServlet extends HttpServlet {
             if( out != null )    out.close();
         }
 
-
     }
 
 
