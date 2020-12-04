@@ -11,17 +11,17 @@ public class UserModel {
 
 	public boolean insert(UserBeans userBeans) throws SQLException, DBConnectException{
 
-		//diaryDao¶¬
+		//diaryDaoï¿½ï¿½ï¿½ï¿½
 		UserDao userDao = new UserDao();
 		boolean result = false;
 
 
 		try {
 			////////////////////
-			//DBÚ‘±
+			//DBï¿½Ú‘ï¿½
 			userDao.connect();
 
-			//@‰ïˆõî•ñ‚Ì“o˜^
+			//ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì“oï¿½^
 			result = userDao.insert(userBeans);
 
 
@@ -43,21 +43,21 @@ public class UserModel {
 
 	public boolean update(UserBeans userBeans) throws SQLException, DBConnectException{
 
-		//diaryDao¶¬
+		//diaryDaoï¿½ï¿½ï¿½ï¿½
 		UserDao userDao = new UserDao();
 		boolean result = false;
 
 
 		try {
 			////////////////////
-			//DBÚ‘±
+			//DBï¿½Ú‘ï¿½
 			userDao.connect();
 
 
-			// user_icon‚ªw’è‚³‚ê‚Ä‚¢‚È‚¢ê‡ADB‚É•Û‘¶‚³‚ê‚Ä‚¢‚é’l‚É‚·‚é
-			// user_icon‚ªw’è‚³‚ê‚Ä‚¢‚éê‡AƒT[ƒo[‚ÉƒAƒbƒv‚³‚ê‚Ä‚¢‚½ƒtƒ@ƒCƒ‹‚ğíœ
+			// user_iconï¿½ï¿½ï¿½wï¿½è‚³ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½ADBï¿½É•Û‘ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½lï¿½É‚ï¿½ï¿½ï¿½
+			// user_iconï¿½ï¿½ï¿½wï¿½è‚³ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡ï¿½Aï¿½Tï¿½[ï¿½oï¿½[ï¿½ÉƒAï¿½bï¿½vï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½íœ
 
-			String fileName = userDao.getUserIcon(userBeans.getUserId()); //DB‚ÉŠi”[‚³‚ê‚Ä‚¢‚éuser_icon‚ÌƒpƒX‚ğæ“¾
+			String fileName = userDao.getUserIcon(userBeans.getUserId()); //DBï¿½ÉŠiï¿½[ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½user_iconï¿½Ìƒpï¿½Xï¿½ï¿½ï¿½æ“¾
 			System.out.println(userBeans.getUserIcon());
 			System.out.println(userBeans.getUserIcon().isEmpty());
 			if(userBeans.getUserIcon().isEmpty()) {
@@ -66,7 +66,7 @@ public class UserModel {
 				DeleteImageFile.delete(fileName);
 			}
 
-			//@‰ïˆõî•ñ‚Ì“o˜^
+			//ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì“oï¿½^
 			result = userDao.update(userBeans);
 
 
@@ -88,16 +88,16 @@ public class UserModel {
 
 	public boolean mailCheck(String mail ,String userId) throws SQLException, DBConnectException{
 
-		//diaryDao¶¬
+		//diaryDaoï¿½ï¿½ï¿½ï¿½
 		UserDao userDao = new UserDao();
 		boolean result =false;
 
 		try {
 			////////////////////
-			//DBÚ‘±
+			//DBï¿½Ú‘ï¿½
 			userDao.connect();
 
-			//@‰ïˆõî•ñ‚Ì“o˜^
+			//ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì“oï¿½^
 			result = userDao.mailCheck(mail,userId);
 
 
@@ -116,35 +116,33 @@ public class UserModel {
 		return result;
 
 	}
+	public UserBeans getBy(String userId) throws SQLException, DBConnectException{
 
-	public UserBeans getUserInfo(String userId) throws SQLException, DBConnectException{
-
-		//diaryDao¶¬
 		UserDao userDao = new UserDao();
-		UserBeans userBeans = new UserBeans();
+		UserBeans userBean = null;
 
-		try {
-			////////////////////
-			//DBÚ‘±
+		try{
+			//ï¿½@ï¿½Ú‘ï¿½
 			userDao.connect();
 
-			//@‰ïˆõî•ñ‚Ì“o˜^
-			userBeans = userDao.getUserInfo(userId);
-
+			//ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê‚Ìæ“¾
+	        userBean = userDao.getBy(userId);
 
 		}catch(SQLException e) {
+			//ï¿½@ï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÉƒRï¿½ï¿½ï¿½\ï¿½[ï¿½ï¿½ï¿½Éƒï¿½ï¿½Oï¿½ï¿½ï¿½oï¿½Í‚ï¿½ï¿½ï¿½
 			e.printStackTrace();
 			throw e;
+
 		}catch(DBConnectException e) {
 			e.printStackTrace();
 			throw e;
-		}
-		finally {
+
+		}finally {
+			//ï¿½@ï¿½Ú‘ï¿½ï¿½iï¿½Rï¿½lï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½Â‚ï¿½ï¿½ï¿½
 			userDao.close();
-
-
 		}
-		return userBeans;
+
+		return userBean;
 
 	}
 }

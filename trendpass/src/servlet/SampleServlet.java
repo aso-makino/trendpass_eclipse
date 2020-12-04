@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,7 +23,7 @@ public class SampleServlet extends HttpServlet {
 	    	String a = request.getServletPath();
 	        if ("/SampleServlet".equals(request.getServletPath())){
 
-	        	//@ƒwƒbƒ_î•ñ‚È‚ÇƒZƒbƒg
+	        	//ï¿½@ï¿½wï¿½bï¿½_ï¿½ï¿½ï¿½È‚ÇƒZï¿½bï¿½g
 	        	response.setContentType("application/json");
 	        	response.setHeader("Cache-Control", "nocache");
 	        	response.setCharacterEncoding("utf-8");
@@ -32,12 +31,12 @@ public class SampleServlet extends HttpServlet {
 	        	ObjectMapper mapper = new ObjectMapper();
 
 	        	String name  = request.getParameter("name");
-	            String greet = "‚±‚ñ‚É‚¿‚ÍA" + name + "‚³‚ñB";
+	            String greet = "ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ÍA" + name + "ï¿½ï¿½ï¿½ï¿½B";
 
 	        	Map<String, Object> resMap = new HashMap<>();
 				resMap.put("str",greet);
 
-				//@ƒIƒuƒWƒFƒNƒg‚ğJson•¶š—ñ‚É•ÏX
+				//JSONå½¢å¼ã«å¤‰æ›
 				String resJson = mapper.writeValueAsString(resMap);
 
 	            PrintWriter out = response.getWriter();

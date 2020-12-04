@@ -3,10 +3,41 @@ package dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import beans.UserBeans;
 
-public class UserDao extends DaoBase {
+public class UserDao extends DaoBase{
+
+	public UserBeans getBy(String userId) throws SQLException{
+
+		UserBeans userBean = null;
+
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			stmt = con.prepareStatement("SELECT * FROM user WHERE user_id = ?");
+
+			stmt.setString(1, userId);
+			rs = stmt.executeQuery();
+
+			while( rs.next() ){
+
+				userBean = new UserBeans();
+				userBean.setUserId(rs.getString("user_id"));
+				userBean.setUserName(rs.getString("user_name"));
+				userBean.setUserIcon(rs.getString("user_icon"));
+				userBean.setSex(rs.getString("sex"));
+				userBean.setBirth(rs.getInt("birth"));
+				userBean.setMail(rs.getString("mail"));
+			}
+
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+
+		return userBean;
+	}
 
 	public boolean insert(UserBeans userBeans) throws SQLException{
 
@@ -21,13 +52,13 @@ public class UserDao extends DaoBase {
 
 		try {
 			////////////////////
-		    //INSERT•¶
+		    //INSERTï¿½ï¿½
 			stmt = con.prepareStatement("INSERT INTO user ( "
 					+ "user_name,user_icon,mail,password,sex,birth) "
 					+ "VALUES(?,?,?,?,?,?)");
 
 			/////////////////////////////////
-			//@’l‚ğƒZƒbƒg
+			//ï¿½@ï¿½lï¿½ï¿½ï¿½Zï¿½bï¿½g
 			stmt.setString(1,userBeans.getUserName());
 			stmt.setString(2,userBeans.getUserIcon());
 			stmt.setString(3,userBeans.getMail());
@@ -62,13 +93,13 @@ public class UserDao extends DaoBase {
 
 		try {
 			////////////////////
-		    //INSERT•¶
+		    //INSERTï¿½ï¿½
 			stmt = con.prepareStatement("UPDATE user SET "
 					+ "user_name = ?,user_icon = ?,mail = ?,password = ?,sex = ?,birth = ? "
 					+ "WHERE user_id = ? ");
 
 			/////////////////////////////////
-			//@’l‚ğƒZƒbƒg
+			//ï¿½@ï¿½lï¿½ï¿½ï¿½Zï¿½bï¿½g
 			stmt.setString(1,userBeans.getUserName());
 			stmt.setString(2,userBeans.getUserIcon());
 			stmt.setString(3,userBeans.getMail());
@@ -106,11 +137,11 @@ public class UserDao extends DaoBase {
 
 		try {
 			////////////////////
-		    //SELECT•¶
+		    //SELECTï¿½ï¿½
 			stmt = con.prepareStatement("SELECT COUNT(*) as count FROM user WHERE mail = ? AND user_id <> ?");
 
 			/////////////////////////////////
-			//@’l‚ğƒZƒbƒg
+			//ï¿½@ï¿½lï¿½ï¿½ï¿½Zï¿½bï¿½g
 			stmt.setString(1,mail);
 			stmt.setString(2,userId);
 			rs = stmt.executeQuery();
@@ -144,11 +175,11 @@ public class UserDao extends DaoBase {
 
 		try {
 			////////////////////
-		    //SELECT•¶
+		    //SELECTï¿½ï¿½
 			stmt = con.prepareStatement("SELECT * FROM user WHERE user_id = ?");
 
 			/////////////////////////////////
-			//@’l‚ğƒZƒbƒg
+			//ï¿½@ï¿½lï¿½ï¿½ï¿½Zï¿½bï¿½g
 			stmt.setString(1,userId);
 			rs = stmt.executeQuery();
 
@@ -181,11 +212,11 @@ public class UserDao extends DaoBase {
 
 		try {
 			////////////////////
-		    //SELECT•¶
+		    //SELECTï¿½ï¿½
 			stmt = con.prepareStatement("SELECT user_icon FROM user WHERE user_id = ?");
 
 			/////////////////////////////////
-			//@’l‚ğƒZƒbƒg
+			//ï¿½@ï¿½lï¿½ï¿½ï¿½Zï¿½bï¿½g
 			stmt.setString(1,userId);
 			rs = stmt.executeQuery();
 
