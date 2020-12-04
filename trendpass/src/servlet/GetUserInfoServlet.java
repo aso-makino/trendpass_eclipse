@@ -66,7 +66,7 @@ public class GetUserInfoServlet extends HttpServlet {
 	    		UserBeans userBeans = new UserBeans();
 
 				try {
-					userBeans = userModel.getUserInfo(userId);
+					userBeans = userModel.getBy(userId);
 				} catch (DBConnectException | SQLException e) {
 					e.printStackTrace();
 				}

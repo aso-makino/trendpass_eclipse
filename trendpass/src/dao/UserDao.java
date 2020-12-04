@@ -26,7 +26,7 @@ public class UserDao extends DaoBase{
 				userBean.setUserId(rs.getString("user_id"));
 				userBean.setUserName(rs.getString("user_name"));
 				userBean.setUserIcon(rs.getString("user_icon"));
-				userBean.setSex(rs.getString("sex"));
+				userBean.setSex(rs.getInt("sex"));
 				userBean.setBirth(rs.getInt("birth"));
 				userBean.setMail(rs.getString("mail"));
 			}
@@ -52,13 +52,13 @@ public class UserDao extends DaoBase{
 
 		try {
 			////////////////////
-		    //INSERT��
+		    //INSERT�ｿｽ�ｿｽ
 			stmt = con.prepareStatement("INSERT INTO user ( "
 					+ "user_name,user_icon,mail,password,sex,birth) "
 					+ "VALUES(?,?,?,?,?,?)");
 
 			/////////////////////////////////
-			//�@�l���Z�b�g
+			//�ｿｽ@�ｿｽl�ｿｽ�ｿｽ�ｿｽZ�ｿｽb�ｿｽg
 			stmt.setString(1,userBeans.getUserName());
 			stmt.setString(2,userBeans.getUserIcon());
 			stmt.setString(3,userBeans.getMail());
@@ -93,13 +93,13 @@ public class UserDao extends DaoBase{
 
 		try {
 			////////////////////
-		    //INSERT��
+		    //INSERT�ｿｽ�ｿｽ
 			stmt = con.prepareStatement("UPDATE user SET "
 					+ "user_name = ?,user_icon = ?,mail = ?,password = ?,sex = ?,birth = ? "
 					+ "WHERE user_id = ? ");
 
 			/////////////////////////////////
-			//�@�l���Z�b�g
+			//�ｿｽ@�ｿｽl�ｿｽ�ｿｽ�ｿｽZ�ｿｽb�ｿｽg
 			stmt.setString(1,userBeans.getUserName());
 			stmt.setString(2,userBeans.getUserIcon());
 			stmt.setString(3,userBeans.getMail());
@@ -137,11 +137,11 @@ public class UserDao extends DaoBase{
 
 		try {
 			////////////////////
-		    //SELECT��
+		    //SELECT�ｿｽ�ｿｽ
 			stmt = con.prepareStatement("SELECT COUNT(*) as count FROM user WHERE mail = ? AND user_id <> ?");
 
 			/////////////////////////////////
-			//�@�l���Z�b�g
+			//�ｿｽ@�ｿｽl�ｿｽ�ｿｽ�ｿｽZ�ｿｽb�ｿｽg
 			stmt.setString(1,mail);
 			stmt.setString(2,userId);
 			rs = stmt.executeQuery();
@@ -175,11 +175,11 @@ public class UserDao extends DaoBase{
 
 		try {
 			////////////////////
-		    //SELECT��
+		    //SELECT�ｿｽ�ｿｽ
 			stmt = con.prepareStatement("SELECT * FROM user WHERE user_id = ?");
 
 			/////////////////////////////////
-			//�@�l���Z�b�g
+			//�ｿｽ@�ｿｽl�ｿｽ�ｿｽ�ｿｽZ�ｿｽb�ｿｽg
 			stmt.setString(1,userId);
 			rs = stmt.executeQuery();
 
@@ -212,11 +212,11 @@ public class UserDao extends DaoBase{
 
 		try {
 			////////////////////
-		    //SELECT��
+		    //SELECT�ｿｽ�ｿｽ
 			stmt = con.prepareStatement("SELECT user_icon FROM user WHERE user_id = ?");
 
 			/////////////////////////////////
-			//�@�l���Z�b�g
+			//�ｿｽ@�ｿｽl�ｿｽ�ｿｽ�ｿｽZ�ｿｽb�ｿｽg
 			stmt.setString(1,userId);
 			rs = stmt.executeQuery();
 
