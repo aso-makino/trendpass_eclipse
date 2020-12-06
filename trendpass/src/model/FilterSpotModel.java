@@ -102,6 +102,35 @@ public class FilterSpotModel {
 		return spotList;
 	}
 
+	public List<SpotBeans> getRankingList(double latitude, double longitude) throws SystemErrException{
+
+		List<SpotBeans> spotList = new ArrayList<SpotBeans>();
+		FilterSpotDao filterSpotDao = new FilterSpotDao();
+
+		try{
+			//　接続
+			filterSpotDao.connect();
+
+			//　検索結果の取得
+		    spotList = filterSpotDao.getRankingList(latitude,longitude);
+
+		}catch(SQLException e) {
+			//　エラー発生した場合にコンソールにログを出力する
+			e.printStackTrace();
+			throw new SystemErrException(e);
+
+		}catch(DBConnectException e) {
+			e.printStackTrace();
+			throw new SystemErrException(e);
+
+		}finally {
+			//　接続（コネクション）を閉じる
+			filterSpotDao.close();
+		}
+
+		return spotList;
+	}
+
 
 	public List<SpotBeans> getSortList(double latitude, double longitude, SortBeans sortBeans, Map<String, Boolean> sortMap) throws SystemErrException {
 		List<SpotBeans> sortListBeans = new ArrayList<SpotBeans>();

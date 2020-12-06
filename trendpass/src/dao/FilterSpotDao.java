@@ -100,8 +100,8 @@ public class FilterSpotDao extends DaoBase{
 								"(SELECT DISTINCT stay.spot_id AS spot_id FROM stay WHERE stay.user_id IN " +
 								"(SELECT user_id_1 AS user_id FROM pass WHERE user_id_2 = ? UNION SELECT user_id_2 AS user_id FROM pass WHERE user_id_1 = ?))AS userstay " +
 								"INNER JOIN spot ON userstay.spot_id = spot.spot_id " +
-								"WHERE X (spot.position_infomation) BETWEEN ? + 1 AND ? - 1 " +
-								"AND Y (spot.position_infomation) BETWEEN ? + 1 AND ? - 1");
+								"WHERE X (spot.position_infomation) BETWEEN ? - 1 AND ? + 1 " +
+								"AND Y (spot.position_infomation) BETWEEN ? - 1 AND ? + 1");
 
 			stmt.setString(1,userId);
 			stmt.setString(2,userId);
@@ -118,8 +118,8 @@ public class FilterSpotDao extends DaoBase{
 				spotBeans.setSpotName(rs.getString("spot.spot_name"));
 				spotBeans.setSpotId(rs.getString("spot.spot_id"));
 				spotBeans.setGenreId(rs.getString("spot.genre_id"));
-				spotBeans.setLongitude(rs.getDouble("Y (sp.position_infomation)"));
-				spotBeans.setRatitude(rs.getDouble("X (sp.position_infomation)"));
+				spotBeans.setLongitude(rs.getDouble("Y(sp.position_infomation)"));
+				spotBeans.setRatitude(rs.getDouble("X(sp.position_infomation)"));
 
 				spotList.add(spotBeans);
 			}
@@ -132,6 +132,52 @@ public class FilterSpotDao extends DaoBase{
 
 		return spotList;
 	}
+
+	public List<SpotBeans> getRankingList(double latitude, double longitude)
+			throws SQLException{
+		if(con==null) return null;
+
+		List<SpotBeans> spotList = new ArrayList<SpotBeans>();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+	    SpotBeans spotBeans = null;
+
+		try {
+			//SQL:
+			//X：経度　Y：緯度
+			stmt = con.prepareStatement("SELECT near.spot_id, near.spot_name, X(position_infomation), Y(position_infomation), near.genre_id FROM " +
+					"(SELECT * FROM spot WHERE X (spot.position_infomation) BETWEEN ? - 1 AND ? + 1 AND Y (spot.position_infomation) BETWEEN ? - 1 AND ? + 1) AS near " +
+					"INNER JOIN stay ON near.spot_id = stay.spot_id GROUP BY near.spot_id ORDER BY COUNT(*) DESC");
+
+			stmt.setDouble(1,latitude);
+			stmt.setDouble(2,latitude);
+			stmt.setDouble(3,longitude);
+			stmt.setDouble(4,longitude);
+
+
+			rs =stmt.executeQuery();
+
+			while(rs.next()){
+			    spotBeans = new SpotBeans();
+
+				spotBeans.setSpotName(rs.getString("spot_name"));
+				spotBeans.setSpotId(rs.getString("spot_id"));
+				spotBeans.setGenreId(rs.getString("genre_id"));
+				spotBeans.setLongitude(rs.getDouble("Y(position_infomation)"));
+				spotBeans.setRatitude(rs.getDouble("X(position_infomation)"));
+
+				spotList.add(spotBeans);
+			}
+
+			}catch(SQLException e) {
+				//エラー発生した場合にコンソールにログを出力する
+				e.printStackTrace();
+				throw e;
+			}
+
+		return spotList;
+	}
+
 
 	/*
 	 * @param sortBeans ソート情報
