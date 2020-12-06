@@ -22,14 +22,13 @@ import exception.SystemErrException;
 import model.FilterSpotModel;
 import model.ReviewModel;
 
+@WebServlet("/RankingServlet")
+public class RankingServlet extends HttpServlet {
 
-@WebServlet("/SpotListServlet")
-public class SpotListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		String userId = request.getParameter("userId");
 		double latitude = 33.583476;
 		double longitude = 130.421318;
 
@@ -38,7 +37,7 @@ public class SpotListServlet extends HttpServlet {
 		List<SpotBeans> spotList = new ArrayList<SpotBeans>();
 
 		try {
-			spotList = filterSpotModel.getList(userId,latitude,longitude);
+			spotList = filterSpotModel.getRankingList(latitude,longitude);
 		 	spotList = revModel.getSpotImage(spotList);
 		}catch(SystemErrException | DBConnectException | SQLException e){
 			e.printStackTrace();
@@ -50,6 +49,8 @@ public class SpotListServlet extends HttpServlet {
        	resMap.put("spotSize",spotList.size());
        	resMap.put("spotList",spotList);
 
+       	System.out.println(spotList.size());
+
 
 		//　オブジェクトをJson文字列に変更
 		String resJson = mapper.writeValueAsString(resMap);
@@ -57,5 +58,4 @@ public class SpotListServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         out.print(resJson);
 	}
-
 }

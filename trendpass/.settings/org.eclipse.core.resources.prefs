@@ -1,6 +1,10 @@
 eclipse.preferences.version=1
+encoding//src/dao/FilterSpotDao.java=UTF-8
 encoding//src/model/FilterSpotModel.java=UTF-8
 encoding//src/model/LoginModel.java=UTF-8
 encoding//src/model/ReviewModel.java=UTF-8
+encoding//src/model/SpotModel.java=UTF-8
+encoding//src/model/StayModel.java=UTF-8
 encoding//src/servlet/AuthServlet.java=UTF-8
-encoding//src/dao/FilterSpotDao.java=UTF-8
+encoding//src/servlet/SortSpotListServlet.java=UTF-8
+encoding//src/servlet/SpotInitialServlet.java=UTF-8
