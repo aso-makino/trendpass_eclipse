@@ -7,11 +7,12 @@
 		maxTotal="100"
 		maxIdle="20"
 		maxWaitMillis="-1"
-		username="root"
-		password=""
+		username = "admin"
+		password = "asordb2020"
 		driverClassName="com.mysql.cj.jdbc.Driver"
-		url="jdbc:mysql://localhost:3306/trendpassdb?serverTimezone=JST"
+		url =  "jdbc:mysql://linuxrdb.cen208fog0so.ap-northeast-1.rds.amazonaws.com:3306/trendpass?serverTimezone=JST"
 		validationQuery="SELECT 0"
 		allowCasualMultipartParsing="true"
+		factory="org.apache.tomcat.dbcp.dbcp2.BasicDataSourceFactory"
 	 />
 </Context>

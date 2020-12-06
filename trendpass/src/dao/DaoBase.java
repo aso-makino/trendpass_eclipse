@@ -7,50 +7,65 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import exception.DBConnectException;
-
 public class DaoBase {
 
 	protected Connection con = null;
+	//テスト用後で消す
+	//ReviewBeans reviewBeans = new ReviewBeans();
 
-	public void connect() throws DBConnectException{
 
-		if( con != null ){
+	public DaoBase() {
+	}
+
+	public DaoBase(Connection con) {
+		this.con = con;
+	}
+
+	public void connect() {
+
+		if (con != null) {
+			//接続済みの場合は何もしない
 			return;
 		}
 
-		InitialContext context = null;
-
+		InitialContext ctx;
 		try {
+			///////////////////////////////////
+			//DBの接続
 			String jndi = "java:comp/env/jdbc/MySQL";
+			ctx = new InitialContext();
 
-			context = new InitialContext();
+			DataSource ds = (DataSource) ctx.lookup(jndi);
 
-			DataSource dataSource = (DataSource) context.lookup(jndi);
+			// MySQLに接続
+			con = ds.getConnection();
 
-			con = dataSource.getConnection();
 
-		}catch(NamingException e) {
-			throw new DBConnectException(e);
-		}catch(SQLException e) {
-			throw new DBConnectException(e);
-		}catch(Exception e) {
-			throw new DBConnectException(e);
+		} catch (NamingException e) {
+			//reviewBeans.setError2("NamingException");
+			e.printStackTrace();
+			//本当は例外をスローして上位側に処理を任せた方がよい
+		} catch (SQLException e) {
+			e.printStackTrace();
+			//reviewBeans.setError3("NamingException");
+			//本当は例外をスローして上位側に処理を任せた方がよい
 		}
 
 	}
 
+	public void close() {
 
-	public void close(){
-
-		if( con != null ){
+		if (con != null) {
 			try {
 				con.close();
 				con = null;
 			} catch (SQLException e) {
-				System.out.println("close");
+				e.printStackTrace();
 			}
 		}
 	}
 
+	public Connection getConnection() {
+		return con;
+	}
 }

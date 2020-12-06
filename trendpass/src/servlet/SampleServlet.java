@@ -36,6 +36,7 @@ public class SampleServlet extends HttpServlet {
 	        	Map<String, Object> resMap = new HashMap<>();
 				resMap.put("str",greet);
 
+
 				//�@�I�u�W�F�N�g��Json������ɕύX
 				String resJson = mapper.writeValueAsString(resMap);
 

@@ -3,46 +3,38 @@ package model;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import beans.SpotBeans;
-import dao.SpotDao;
+import beans.UserBeans;
+import dao.UserDao;
 
-public class SpotModel{
+public class UserModel{
 
-	/**スポット情報を登録メソッド
+	/**会員情報を削除するメソッド
 	 * @param userId
-	 * @param jenreId
-	 * @param spotName
-	 * @param spotReview
-	 * @param ratingBar
-	 * @param filename
-	 * @param longitude
-	 * @param latitude
-	 * @return insert
+	 * @return userBeans
 	 */
-
-	public static boolean insertSpot(SpotBeans spotBeans, int userId) {
+	public boolean delete(UserBeans userBeans) {
 
 		//テスト用
-		System.out.println("SpotModel 到達");
+		System.out.println("UserModel 到達");
 
 		//戻り値
-		boolean insert = true;
+		boolean delete = true;
 
 		//DAOの生成
-		SpotDao spotDao = new SpotDao();
+		UserDao userDao = new UserDao();
 
 		try {
-			//SpotDaoに接続
+			//ReviewDaoに接続
 			System.out.println("try 開始");
 
-			spotDao.connect();
+			userDao.connect();
 
 			System.out.println("コネクション成功");
 
 			//メソッド呼び出し
-			insert = spotDao.insert(spotBeans, userId);
+			delete = userDao.delete(userBeans);
 		}catch(Exception e){
-			insert = true;
+			delete = false;
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
@@ -50,13 +42,12 @@ public class SpotModel{
 			String str = sw.toString();
 			System.out.println(str);
 			System.out.println("コネクション失敗");
-
 		}finally {
-			//SpotDaoとの接続を切る
-			spotDao.close();
+			//ReviewDaoとの接続を切る
+			userDao.close();
 			System.out.println("コネクション終了");
 			}
 		System.out.println("try 終了");
-		return insert;
-		}
+		return delete;
+	}
 }

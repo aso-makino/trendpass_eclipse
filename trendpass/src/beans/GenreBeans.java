@@ -1,15 +1,13 @@
 package beans;
 
-import java.awt.image.BufferedImage;
-
 public class GenreBeans {
-	private String genreId;
+	private int genreId;
 	private String genreName;
 
-	public String getGenreId() {
+	public int getGenreId() {
 		return genreId;
 	}
-	public void setGenreId(String genreId) {
+	public void setGenreId(int genreId) {
 		this.genreId = genreId;
 	}
 	public String getGenreName() {

@@ -3,17 +3,17 @@ package beans;
 import java.awt.image.BufferedImage;
 
 public class UserBeans {
-	private String userId;
+	private int userId;
 	private String userName;
 	private BufferedImage userIcon;
 	private String mail;
 	private String sex;
 	private int birth;
 
-	public String getUserId() {
+	public int getUserId() {
 		return userId;
 	}
-	public void setUserId(String userId) {
+	public void setUserId(int userId) {
 		this.userId = userId;
 	}
 	public String getUserName() {
