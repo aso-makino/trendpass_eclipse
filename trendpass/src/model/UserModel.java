@@ -5,23 +5,131 @@ import java.sql.SQLException;
 import beans.UserBeans;
 import dao.UserDao;
 import exception.DBConnectException;
+import utils.DeleteImageFile;
 
 public class UserModel {
 
+	public boolean insert(UserBeans userBeans) throws SQLException, DBConnectException{
+
+		//diaryDaoï¿½ï¿½ï¿½ï¿½
+		UserDao userDao = new UserDao();
+		boolean result = false;
+
+
+		try {
+			////////////////////
+			//DBï¿½Ú‘ï¿½
+			userDao.connect();
+
+			//ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì“oï¿½^
+			result = userDao.insert(userBeans);
+
+
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}catch(DBConnectException e) {
+			e.printStackTrace();
+			throw e;
+		}
+		finally {
+			userDao.close();
+
+
+		}
+		return result;
+
+	}
+
+	public boolean update(UserBeans userBeans) throws SQLException, DBConnectException{
+
+		//diaryDaoï¿½ï¿½ï¿½ï¿½
+		UserDao userDao = new UserDao();
+		boolean result = false;
+
+
+		try {
+			////////////////////
+			//DBï¿½Ú‘ï¿½
+			userDao.connect();
+
+
+			// user_iconï¿½ï¿½ï¿½wï¿½è‚³ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½ADBï¿½É•Û‘ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½lï¿½É‚ï¿½ï¿½ï¿½
+			// user_iconï¿½ï¿½ï¿½wï¿½è‚³ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡ï¿½Aï¿½Tï¿½[ï¿½oï¿½[ï¿½ÉƒAï¿½bï¿½vï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½íœ
+
+			String fileName = userDao.getUserIcon(userBeans.getUserId()); //DBï¿½ÉŠiï¿½[ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½user_iconï¿½Ìƒpï¿½Xï¿½ï¿½ï¿½æ“¾
+			System.out.println(userBeans.getUserIcon());
+			System.out.println(userBeans.getUserIcon().isEmpty());
+			if(userBeans.getUserIcon().isEmpty()) {
+				userBeans.setUserIcon(fileName);
+			}else {
+				DeleteImageFile.delete(fileName);
+			}
+
+			//ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì“oï¿½^
+			result = userDao.update(userBeans);
+
+
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}catch(DBConnectException e) {
+			e.printStackTrace();
+			throw e;
+		}
+		finally {
+			userDao.close();
+
+
+		}
+		return result;
+
+	}
+
+	public boolean mailCheck(String mail ,String userId) throws SQLException, DBConnectException{
+
+		//diaryDaoï¿½ï¿½ï¿½ï¿½
+		UserDao userDao = new UserDao();
+		boolean result =false;
+
+		try {
+			////////////////////
+			//DBï¿½Ú‘ï¿½
+			userDao.connect();
+
+			//ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì“oï¿½^
+			result = userDao.mailCheck(mail,userId);
+
+
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}catch(DBConnectException e) {
+			e.printStackTrace();
+			throw e;
+		}
+		finally {
+			userDao.close();
+
+
+		}
+		return result;
+
+	}
 	public UserBeans getBy(String userId) throws SQLException, DBConnectException{
 
 		UserDao userDao = new UserDao();
 		UserBeans userBean = null;
 
 		try{
-			//@Ú‘±
+			//ï¿½@ï¿½Ú‘ï¿½
 			userDao.connect();
 
-			//@ŒŸõŒ‹‰Ê‚Ìæ“¾
+			//ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê‚Ìæ“¾
 	        userBean = userDao.getBy(userId);
 
 		}catch(SQLException e) {
-			//@ƒGƒ‰[”­¶‚µ‚½ê‡‚ÉƒRƒ“ƒ\[ƒ‹‚ÉƒƒO‚ğo—Í‚·‚é
+			//ï¿½@ï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÉƒRï¿½ï¿½ï¿½\ï¿½[ï¿½ï¿½ï¿½Éƒï¿½ï¿½Oï¿½ï¿½ï¿½oï¿½Í‚ï¿½ï¿½ï¿½
 			e.printStackTrace();
 			throw e;
 
@@ -30,7 +138,7 @@ public class UserModel {
 			throw e;
 
 		}finally {
-			//@Ú‘±iƒRƒlƒNƒVƒ‡ƒ“)‚ğ•Â‚¶‚é
+			//ï¿½@ï¿½Ú‘ï¿½ï¿½iï¿½Rï¿½lï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½Â‚ï¿½ï¿½ï¿½
 			userDao.close();
 		}
 

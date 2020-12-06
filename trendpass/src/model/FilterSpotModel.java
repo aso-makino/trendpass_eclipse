@@ -157,4 +157,36 @@ public class FilterSpotModel {
 		}
 		return sortListBeans;
 	}
+
+	public List<SpotBeans> getNearSpotList(String latitude,String longitude) throws DBConnectException, SQLException {
+
+		double latitudeD = Double.parseDouble(latitude);
+		double longitudeD = Double.parseDouble(longitude);
+
+		FilterSpotDao filterSpotDao = new FilterSpotDao();
+		List<SpotBeans> list = new ArrayList<SpotBeans>();
+
+		try{
+			//　接続
+			filterSpotDao.connect();
+
+			//　検索結果の取得
+	        list = filterSpotDao.getNearSpotList(latitudeD,longitudeD);
+
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw e;
+
+		}catch(DBConnectException e) {
+			e.printStackTrace();
+			throw e;
+
+		}finally {
+			//　接続（コネクション）を閉じる
+			filterSpotDao.close();
+		}
+
+		return list;
+
+	}
 }

@@ -293,4 +293,48 @@ public class FilterSpotDao extends DaoBase{
      GROUP BY  spot_id
 	HAVING MAX(AVG(re.evaluation))
 	*/
+
+	public List<SpotBeans> getNearSpotList(double latitude,double longitude)
+			throws SQLException{
+
+		List<SpotBeans> list = new ArrayList<SpotBeans>();
+
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			stmt = con.prepareStatement("SELECT *, ABS(? * ? - X(position_infomation) * Y(position_infomation)) AS distance, X(position_infomation),Y(position_infomation) "
+					+ "FROM spot "
+					+ "WHERE X(position_infomation) BETWEEN ? - 0.0089 AND ? + 0.0089 "
+					+ "AND Y(position_infomation) BETWEEN ? - 0.0089 AND ? + 0.0089 "
+					+ "ORDER BY distance ASC");
+
+			stmt.setDouble(1,latitude);
+			stmt.setDouble(2,longitude);
+			stmt.setDouble(3,latitude);
+			stmt.setDouble(4,latitude);
+			stmt.setDouble(5,longitude);
+			stmt.setDouble(6,longitude);
+
+			rs = stmt.executeQuery();
+
+			while( rs.next() ){
+				SpotBeans spotBeans = new SpotBeans();
+
+				spotBeans.setGenreId(rs.getString("genre_id"));
+				spotBeans.setLongitude(rs.getDouble("Y(position_infomation)"));
+				spotBeans.setRatitude(rs.getDouble("X(position_infomation)"));
+				spotBeans.setSpotId(rs.getString("spot_id"));
+				spotBeans.setSpotName(rs.getString("spot_name"));
+
+				list.add(spotBeans);
+			}
+
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+
+		return list;
+	}
 }
