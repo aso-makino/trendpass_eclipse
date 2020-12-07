@@ -38,6 +38,7 @@ public class SampleServlet extends HttpServlet {
 
 
 				//�@�I�u�W�F�N�g��Json������ɕύX
+				//JSON形式に変換
 				String resJson = mapper.writeValueAsString(resMap);
 
 	            PrintWriter out = response.getWriter();

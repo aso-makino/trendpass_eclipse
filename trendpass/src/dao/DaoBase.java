@@ -68,4 +68,33 @@ public class DaoBase {
 	public Connection getConnection() {
 		return con;
 	}
+	public void beginTranzaction() throws SQLException{
+		if(con!=null) {
+			con.setAutoCommit(false);
+		}
+	}
+	public void commit() throws SQLException {
+        if(con != null){
+            try {
+                con.commit();
+            } finally{
+                con.setAutoCommit(true);
+            }
+        }
+    }
+	  public void rollback() {
+	        if(con != null){
+	            try {
+	                con.rollback();
+	            }catch(SQLException e){
+	                System.out.println("rollebackに失敗しました：");
+	            } finally{
+	                try{
+	                    con.setAutoCommit(true);
+	                }catch(SQLException e){
+	                    System.out.println("setAutoCommitに失敗しました：");
+	                }
+	            }
+	        }
+	  }
 }

@@ -2,3 +2,4 @@
 trendpass/.classpath
 trendpass/src/hidden/
 trendpass/META-INF/context.xml
+*.class

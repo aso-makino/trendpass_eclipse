@@ -1,14 +1,13 @@
 package beans;
 
-import java.awt.image.BufferedImage;
-
 public class UserBeans {
 	private int userId;
 	private String userName;
-	private BufferedImage userIcon;
+	private String userIcon;
 	private String mail;
-	private String sex;
+	private int sex;
 	private int birth;
+	private String password;
 
 	public int getUserId() {
 		return userId;
@@ -22,10 +21,10 @@ public class UserBeans {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public BufferedImage getUserIcon() {
+	public String getUserIcon() {
 		return userIcon;
 	}
-	public void setUserIcon(BufferedImage userIcon) {
+	public void setUserIcon(String userIcon) {
 		this.userIcon = userIcon;
 	}
 	public String getMail() {
@@ -34,10 +33,10 @@ public class UserBeans {
 	public void setMail(String mail) {
 		this.mail = mail;
 	}
-	public String getSex() {
+	public int getSex() {
 		return sex;
 	}
-	public void setSex(String sex) {
+	public void setSex(int sex) {
 		this.sex = sex;
 	}
 	public int getBirth() {
@@ -45,6 +44,12 @@ public class UserBeans {
 	}
 	public void setBirth(int birth) {
 		this.birth = birth;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 }
