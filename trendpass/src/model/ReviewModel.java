@@ -71,4 +71,33 @@ public class ReviewModel {
 		return result;
 
 	}
+
+	public List<ReviewBeans> getList(String spotId) throws DBConnectException, SQLException{
+
+
+		List<ReviewBeans> list = new ArrayList<ReviewBeans>();
+
+		ReviewDao reviewDao = new ReviewDao();
+
+		try {
+
+			//DB�ڑ�
+			reviewDao.connect();
+
+
+			list = reviewDao.getList(spotId);
+
+		}catch(SQLException e) {
+			throw e;
+
+		}catch(DBConnectException e) {
+			throw e;
+		}
+		finally {
+			reviewDao.close();
+		}
+
+		return list;
+
+	}
 }

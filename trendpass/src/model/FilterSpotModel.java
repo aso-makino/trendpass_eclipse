@@ -189,4 +189,34 @@ public class FilterSpotModel {
 		return list;
 
 	}
+
+	public SpotBeans getBy(String spotId) throws DBConnectException, SQLException{
+
+
+		FilterSpotDao filterSpotDao = new FilterSpotDao();
+
+		SpotBeans spotBeans = new SpotBeans();
+
+		try {
+
+			//DB�ڑ�
+			filterSpotDao.connect();
+
+
+			spotBeans = filterSpotDao.getBy(spotId);
+
+		}catch(SQLException e) {
+			throw e;
+
+		}catch(DBConnectException e) {
+			throw e;
+		}
+		finally {
+			filterSpotDao.close();
+		}
+
+		return spotBeans;
+
+	}
+
 }
