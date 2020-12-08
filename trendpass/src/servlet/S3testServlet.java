@@ -44,8 +44,8 @@ public class S3testServlet extends HttpServlet {
 	//変数宣言
     final String S3_SERVICE_END_POINT    = "http://s3-ap-northeast-1.amazonaws.com";
     final String S3_REGION               = "ap-northeast-1";
-	final String access_key = "AKIA4USE7UMYWNYOFI46";
-	final String Secret_access_key = "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";
+	final String access_key = "セキュリティのため保護";
+	final String Secret_access_key = "セキュリティのため保護";
 
 	//キーの生成
 	 AWSCredentials credentials
