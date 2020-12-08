@@ -85,11 +85,10 @@ public class SetPositionServlet extends HttpServlet {
         	response.setCharacterEncoding("utf-8");
 
         	ObjectMapper mapper = new ObjectMapper();
-        	String name  = request.getParameter("userId");
-            String greet = "こんにちは、" + name + "さん。";
+            String greet = "setPosition";
 
         	Map<String, Object> resMap = new HashMap<>();
-			resMap.put("str",greet);
+			resMap.put("greet",greet);
 
 			//　オブジェクトをJson文字列に変更
 			String resJson = mapper.writeValueAsString(resMap);
