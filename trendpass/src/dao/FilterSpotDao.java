@@ -5,8 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import beans.SortBeans;
 import beans.SpotBeans;
@@ -95,14 +95,15 @@ public class FilterSpotDao extends DaoBase{
 
 		try {
 			//SQL:[ログインユーザとすれちがったユーザ ] が訪れたスポットでかつ、ログインユーザを中点とした1辺222kmの正方形の範囲でスポット情報を取得
-			//X：経度　Y：緯度
+			//X：経度 130....　Y：緯度33...
 			stmt = con.prepareStatement("SELECT * FROM " +
 								"(SELECT DISTINCT stay.spot_id AS spot_id FROM stay WHERE stay.user_id IN " +
 								"(SELECT user_id_1 AS user_id FROM pass WHERE user_id_2 = ? UNION SELECT user_id_2 AS user_id FROM pass WHERE user_id_1 = ?))AS userstay " +
 								"INNER JOIN spot ON userstay.spot_id = spot.spot_id " +
-								"WHERE X (spot.position_infomation) BETWEEN ? + 1 AND ? - 1 " +
-								"AND Y (spot.position_infomation) BETWEEN ? + 1 AND ? - 1");
+								"WHERE X (spot.position_infomation) BETWEEN ? - 1 AND ? + 1 " +
+								"AND Y (spot.position_infomation) BETWEEN ? - 1 AND ? + 1");
 
+			//博多駅　130.421318　33.583476
 			stmt.setString(1,userId);
 			stmt.setString(2,userId);
 			stmt.setDouble(3,longitude);
@@ -118,8 +119,8 @@ public class FilterSpotDao extends DaoBase{
 				spotBeans.setSpotName(rs.getString("spot.spot_name"));
 				spotBeans.setSpotId(rs.getString("spot.spot_id"));
 				spotBeans.setGenreId(rs.getString("spot.genre_id"));
-				spotBeans.setLongitude(rs.getDouble("Y (sp.position_infomation)"));
-				spotBeans.setRatitude(rs.getDouble("X (sp.position_infomation)"));
+				spotBeans.setLongitude(rs.getDouble("Y (spot.position_infomation)"));
+				spotBeans.setRatitude(rs.getDouble("X (spot.position_infomation)"));
 
 				spotList.add(spotBeans);
 			}
@@ -138,14 +139,17 @@ public class FilterSpotDao extends DaoBase{
 	 * @param latitude 緯度
 	 * @param longitude 経度
 	 */
-	public List<SpotBeans> getSortList(double latitude, double longitude, SortBeans sortBeans,Map<String, Boolean> sortMap) throws SQLException{
+	public List<SpotBeans> getSortList(double latitude, double longitude, String userId, SortBeans sortBeans) throws SQLException{
 		if(con==null) return null;
 
 		List<SpotBeans> spotList = new ArrayList<SpotBeans>();
 		SpotBeans spotBeans = new SpotBeans();
 
+		LinkedHashMap<String,Object> sortMap = new LinkedHashMap<String,Object> ();
+
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
+
 
 	    Calendar calendar = Calendar.getInstance();
 	    int year = calendar.get(Calendar.YEAR);
@@ -155,65 +159,78 @@ public class FilterSpotDao extends DaoBase{
 	    Integer maxDist = sortBeans.getMaxDistance();
 
 		try {
-			this.beginTranzaction();
-			//X：経度 Y：緯度
-			String sql = "SELECT sp.spot_name, sp.spot_id, sp.genre_id, re.review_image "
-					+ "X (sp.position_infomation) , Y (sp.position_infomation) "
-					+ "FROM spot as sp INNER JOIN review as re "
-					+ "ON sp.user_id = re.user_id "
-					+ "WHERE X (sp.position_infomation) = ? "
-					+ "AND   Y (sp.position_infomation) = ? ";
 
-			stmt.setDouble(1,longitude);
-			stmt.setDouble(2,latitude);
+			//SQL:[ログインユーザとすれちがったユーザ ] が訪れたスポットでかつ、ログインユーザを中点とした1辺222kmの正方形の範囲でスポット情報を取得
+			StringBuffer strBuf =  new StringBuffer();
+
+			strBuf.append		("SELECT * FROM " +
+								"(SELECT DISTINCT stay.spot_id AS spot_id FROM stay WHERE stay.user_id IN " +
+								"(SELECT user_id_1 AS user_id FROM pass WHERE user_id_2 = ? UNION SELECT user_id_2 AS user_id FROM pass WHERE user_id_1 = ?))AS userstay " +
+								"INNER JOIN spot ON userstay.spot_id = spot.spot_id " +
+								"WHERE X (spot.position_infomation) BETWEEN ? - 1 AND ? + 1 " +
+								"AND Y (spot.position_infomation) BETWEEN ? - 1 AND ? + 1 ")
+								;
+
+			sortMap.put("userId1",userId);
+			sortMap.put("userId2",userId);
+			sortMap.put("latitude1",longitude);
+			sortMap.put("latitude2",longitude);
+			sortMap.put("latitude1",latitude);
+			sortMap.put("latitude2",latitude);
 
 			//年代ソート
 			if(generation!=null) {
-			//生まれ年から現在の年を引いて年齢を出す
-			stmt = con.prepareStatement(" SELECT user.birth - ? FROM user WHERE user.user_id = ? ");
-			stmt.setInt(1,year);
-			//stmt.setString(2,userId);
-			rs = stmt.executeQuery();
-
-			//rsの結果を取得する
-
-			String genSortSql = " AND BETWEEN ? AND < ?  ";
-			stmt.setInt(1,year);
-			stmt.setInt(2,year+10);
-			sql += genSortSql;
+				strBuf.append (" AND BETWEEN ? - user.birth AND ? ") ;
+				sortMap.put("year1",year);
+				sortMap.put("year2",year + 10);
 			}
 			//性別ソート
-			if(!sortBeans.getSex().equals("")) {
-				sql += " AND user.sex = ? ";
-				stmt.setString(1,sortBeans.getSex());
+			if(sortBeans.getSex() != null) {
+				strBuf.append ( " AND user.sex = ? " ) ;
+				sortMap.put("sex",sortBeans.getSex() );
 			}
 			//ジャンルソート
-			if(!sortBeans.getGenre().equals("")) {
-				sql += " AND ge.genre_name = ? ";
-				stmt.setString(1,sortBeans.getGenre());
+			if(sortBeans.getGenre() != null ) {
+				strBuf.append ( " AND genre.genre_name = ? " );
+				sortMap.put("genre",sortBeans.getGenre());
 			}
 			//距離ソート
-			if(minDist!=null) {
+			if(minDist != null && maxDist != null) {
+				strBuf.append ( " AND  " );
 
+				sortMap.put("minDist",minDist);
+				sortMap.put("maxDist",maxDist);
 			}
-			if(maxDist!=null) {
 
-			}
 			//人気ソートを選択
 			if(sortBeans.isPopularOrder()) {
-				sql += " GROUP BY sp.spot_id "
-					+  " OREDE BY AVG(genre.evaluation) ";
+				strBuf.append( " GROUP BY spot.spot_id "
+					+  " OREDE BY AVG(genre.evaluation) " ) ;
 			}
 
-			stmt = con.prepareStatement(sql);
+			stmt = con.prepareStatement( strBuf.toString() );
 
-			/*
-			//人気順 spot_idごとの平均評価の降順 (AVG(evaluation))
-			//ジャンル genre.genre_name = ?
+			//
+			int paramNumber = 1;
+			for (String paramName : sortMap.keySet()) {
 
-			*/
+			    Object paramValue = sortMap.get(paramName);
 
-			rs =stmt.executeQuery();
+			    //バインド変数の型を検査しセットしていく
+			    if (paramValue != null) {
+			        if (paramValue instanceof String ) {
+			            stmt.setString(paramNumber, (String) paramValue);
+			        } else if(paramValue instanceof Integer){
+			            stmt.setInt(paramNumber, (Integer) paramValue);
+			        }else{
+			        	stmt.setDouble(paramNumber, (Double) paramValue);
+			        }
+			        paramNumber ++;
+			    }
+			}
+
+			//実行
+			rs = stmt.executeQuery();
 
 			while(rs.next()){
 				spotBeans = new SpotBeans();
@@ -227,24 +244,11 @@ public class FilterSpotDao extends DaoBase{
 				spotList.add(spotBeans);
 			}
 
-			this.commit();
-
 			}catch(SQLException e) {
-				this.rollback();
 				e.printStackTrace();
 				throw e;
 			}
 
 		return spotList;
 	}
-	/*
-	SELECT sp.spot_name, sp.spot_id, sp.genre_id, re.review_image
-	X (sp.position_infomation) , Y (sp.position_infomation)
-	 FROM spot as sp INNER JOIN review as re
-	 ON sp.user_id = re.user_id
-	 WHERE X (sp.position_infomation) =  X (sp.position_infomation)
-	 AND   Y (sp.position_infomation)  =  Y (sp.position_infomation)
-     GROUP BY  spot_id
-	HAVING MAX(AVG(re.evaluation))
-	*/
 }

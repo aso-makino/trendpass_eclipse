@@ -30,9 +30,12 @@ public class SpotListServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String userId = request.getParameter("userId");
+		double latitude = Double.parseDouble(request.getParameter( "latitude"  ) );
+		double longitude = Double.parseDouble(request.getParameter("longitude") );
+		/*
 		double latitude = 33.583476;
 		double longitude = 130.421318;
-
+		*/
 		FilterSpotModel filterSpotModel = new FilterSpotModel();
 		ReviewModel revModel = new ReviewModel();
 		List<SpotBeans> spotList = new ArrayList<SpotBeans>();
@@ -47,12 +50,10 @@ public class SpotListServlet extends HttpServlet {
 		ObjectMapper mapper = new ObjectMapper();
        	Map<String, Object> resMap = new HashMap<>();
 
-       	resMap.put("spotSize",spotList.size());
        	resMap.put("spotList",spotList);
+       	resMap.put("spotSize",spotList.size() );
 
-
-		//　オブジェクトをJson文字列に変更
-		String resJson = mapper.writeValueAsString(resMap);
+       	String resJson = mapper.writeValueAsString(resMap);
 
         PrintWriter out = response.getWriter();
         out.print(resJson);
