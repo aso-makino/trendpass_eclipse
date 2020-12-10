@@ -29,8 +29,12 @@ public class RankingServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		double latitude = 33.583476;
-		double longitude = 130.421318;
+
+		double latitude = Double.parseDouble(request.getParameter("latitude"));
+		double longitude = Double.parseDouble(request.getParameter("longitude"));
+
+		System.out.println(latitude);
+		System.out.println(longitude);
 
 		FilterSpotModel filterSpotModel = new FilterSpotModel();
 		ReviewModel revModel = new ReviewModel();

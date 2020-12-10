@@ -2,9 +2,12 @@ package model;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.SQLException;
+import java.util.List;
 
 import beans.SpotBeans;
 import dao.SpotDao;
+import exception.DBConnectException;
 
 public class SpotModel{
 
@@ -20,13 +23,13 @@ public class SpotModel{
 	 * @return insert
 	 */
 
-	public static boolean insertSpot(SpotBeans spotBeans, int userId) {
+	public String insertSpot(SpotBeans spotBeans, String userId) {
 
 		//テスト用
 		System.out.println("SpotModel 到達");
 
 		//戻り値
-		boolean insert = true;
+		String spotId = "";
 
 		//DAOの生成
 		SpotDao spotDao = new SpotDao();
@@ -40,15 +43,9 @@ public class SpotModel{
 			System.out.println("コネクション成功");
 
 			//メソッド呼び出し
-			insert = spotDao.insert(spotBeans, userId);
+			spotId = spotDao.insert(spotBeans, userId);
 		}catch(Exception e){
-			insert = true;
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
-			pw.flush();
-			String str = sw.toString();
-			System.out.println(str);
+			e.printStackTrace();
 			System.out.println("コネクション失敗");
 
 		}finally {
@@ -57,7 +54,7 @@ public class SpotModel{
 			System.out.println("コネクション終了");
 			}
 		System.out.println("try 終了");
-		return insert;
+		return spotId;
 		}
 
 

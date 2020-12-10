@@ -39,7 +39,7 @@ public class SignChangeServlet extends HttpServlet {
 
 			request.setCharacterEncoding("utf-8");
 
-			String name="null";
+			String name= null;
 			String userId = null;
 			String userName = null;
   			String userMail = null;

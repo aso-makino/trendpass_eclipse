@@ -1,6 +1,9 @@
 package servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,47 +23,42 @@ import model.UserModel;
 @WebServlet("/Unsubscribe")
 public class UnsubscribeServlet extends HttpServlet {
 
-	//テスト用 後でPOST通信に変更
+	//繝�繧ｹ繝育畑 蠕後〒POST騾壻ｿ｡縺ｫ螟画峩
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		//Androidとの通信規約
+		//Android縺ｨ縺ｮ騾壻ｿ｡隕冗ｴ�
 		response.setContentType("application/json");
 		response.setHeader("Cache-Control", "nocache");
 		response.setCharacterEncoding("utf-8");
 
-		//データ受信
+		//繝�繝ｼ繧ｿ蜿嶺ｿ｡
 		ObjectMapper mapper = new ObjectMapper();
 
-		//セッション開始
-		HttpSession session = request.getSession();
+		//莉ｮ繝�繝ｼ繧ｿ
+		String userId = request.getParameter("userId");
 
-		//仮データ
-		int userId = 0000000;
-
-	    //Modelインスタンス生成
+		System.out.println(userId);
+	    //Model繧､繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ逕滓��
 	    UserModel userModel = new UserModel();
 
-	    //Beansインスタンス生成
+	    //Beans繧､繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ逕滓��
 	    UserBeans userBeans = new UserBeans();
 
-	    //退会処理メソッド
+	    //騾�莨壼�ｦ逅�繝｡繧ｽ繝�繝�
 	    userBeans.setUserId(userId);
-	    System.out.println("deleteUserメソッド開始");
+	    System.out.println("deleteUser繝｡繧ｽ繝�繝蛾幕蟋�");
 	    boolean deleteUser = userModel.delete(userBeans);
 
-	    System.out.println("deleteUserメソッド終了");
+	    System.out.println("deleteUser繝｡繧ｽ繝�繝臥ｵゆｺ�");
 
-	    //RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/test.jsp");
-		//dispatcher.forward(request, response);
+	    Map<String, Object> resMap = new HashMap<>();
+		resMap.put("result",deleteUser);
+	    //繝�繝ｼ繧ｿ騾∽ｿ｡
+	    String resJson = mapper.writeValueAsString(resMap);
 
-	    //判別
-	    boolean isSelect = true;
-	    if(deleteUser == false) {
-	    	isSelect = false;
-	    }
-	    //データ送信
-	    String resJson = mapper.writeValueAsString(isSelect);
+        PrintWriter out = response.getWriter();
+        out.print(resJson);
 
 		}
 }

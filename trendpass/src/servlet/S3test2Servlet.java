@@ -30,32 +30,32 @@ public class S3test2Servlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		//セッション開始
+		//繧ｻ繝�繧ｷ繝ｧ繝ｳ髢句ｧ�
 		HttpSession session = request.getSession();
 
-		//ファイルパス
+		//繝輔ぃ繧､繝ｫ繝代せ
 		String filepass = "2020-12-03 07:50:03housenmasanori.jpg";
 
-	    /*画像をS3に保存するメソッド*/
+	    /*逕ｻ蜒上ｒS3縺ｫ菫晏ｭ倥☆繧九Γ繧ｽ繝�繝�*/
 
-		//変数宣言
+		//螟画焚螳｣險�
 	    final String S3_SERVICE_END_POINT    = "http://s3-ap-northeast-1.amazonaws.com";
 	    final String S3_REGION               = "ap-northeast-1";
-		final String access_key = "AKIA4USE7UMYWNYOFI46";
-		final String Secret_access_key = "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";
+		final String access_key = "";
+		final String Secret_access_key = "";
 
-		//キーの生成
+		//繧ｭ繝ｼ縺ｮ逕滓��
 		 AWSCredentials credentials
 		 = new BasicAWSCredentials(access_key,Secret_access_key);
-		 System.out.println("AWS-ClientKeyの生成");
+		 System.out.println("AWS-ClientKey縺ｮ逕滓��");
 
-		 // S3クライアントの生成
+		 // S3繧ｯ繝ｩ繧､繧｢繝ｳ繝医�ｮ逕滓��
 		 ClientConfiguration clientConfig = new ClientConfiguration();
-		 	clientConfig.setProtocol(Protocol.HTTP);  // プロトコル
-		    clientConfig.setConnectionTimeout(30000);  // 接続タイムアウト(ms)
-		    System.out.println("AWS-Clientの情報設定");
+		 	clientConfig.setProtocol(Protocol.HTTP);  // 繝励Ο繝医さ繝ｫ
+		    clientConfig.setConnectionTimeout(30000);  // 謗･邯壹ち繧､繝�繧｢繧ｦ繝�(ms)
+		    System.out.println("AWS-Client縺ｮ諠�蝣ｱ險ｭ螳�");
 
-		 // エンドポイント設定
+		 // 繧ｨ繝ｳ繝峨�昴う繝ｳ繝郁ｨｭ螳�
 	        EndpointConfiguration endpointConfiguration =
 	        		new EndpointConfiguration(S3_SERVICE_END_POINT,  S3_REGION);
 
@@ -64,9 +64,9 @@ public class S3test2Servlet extends HttpServlet {
 	        		.withCredentials(new AWSStaticCredentialsProvider(credentials))
 	                .withClientConfiguration(clientConfig)
 	                .withEndpointConfiguration(endpointConfiguration).build();
-	        System.out.println("エンドポイントの設定");
+	        System.out.println("繧ｨ繝ｳ繝峨�昴う繝ｳ繝医�ｮ險ｭ螳�");
 
-	        /*Bucket内の画像を削除*/
+	        /*Bucket蜀�縺ｮ逕ｻ蜒上ｒ蜑企勁*/
 	        String bucketName = "trendpasss";
 	        String keyName = "2020-12-03 07:50:03housenmasanori.jpg";
 

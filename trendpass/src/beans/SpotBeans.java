@@ -1,26 +1,19 @@
 package beans;
 
 public class SpotBeans {
-	private int spotId;
+	private String spotId;
 	private String spotName;
-	private String spotReview;
-	private double ratitude;//
+	private double latitude;//
 	private double longitude; //
-	private int genreId;
-	private String filename;
-	private int ratingBar;
-	private String error;//テスト用変数、あとで消す
+	private String genreId;
+	private String spotImage;
+	private String userId;
 
-	public String getFilename() {
-		return filename;
-	}
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
-	public int getSpotId() {
+
+	public String getSpotId() {
 		return spotId;
 	}
-	public void setSpotId(int spotId) {
+	public void setSpotId(String spotId) {
 		this.spotId = spotId;
 	}
 	public String getSpotName() {
@@ -29,11 +22,11 @@ public class SpotBeans {
 	public void setSpotName(String spotName) {
 		this.spotName = spotName;
 	}
-	public double getRatitude() {
-		return ratitude;
+	public double getLatitude() {
+		return latitude;
 	}
-	public void setRatitude(double ratitude) {
-		this.ratitude = ratitude;
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
 	}
 	public double getLongitude() {
 		return longitude;
@@ -41,29 +34,25 @@ public class SpotBeans {
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
-	public int getGenreId() {
+	public String getGenreId() {
 		return genreId;
 	}
-	public void setGenreId(int genreId) {
+	public void setGenreId(String genreId) {
 		this.genreId = genreId;
 	}
-	public int getRatingBar() {
-		return ratingBar;
+
+	public String getSpotImage() {
+		return spotImage;
 	}
-	public void setRatingBar(int ratingBar) {
-		this.ratingBar = ratingBar;
+	public void setSpotImage(String spotImage) {
+		this.spotImage = spotImage;
 	}
-	public String getSpotReview() {
-		return spotReview;
+	public String getUserId() {
+		return userId;
 	}
-	public void setSpotReview(String spotReview) {
-		this.spotReview = spotReview;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
-	public String getError() {
-		return error;
-	}
-	public void setError(String error) {
-		this.error = error;
-	}
+
 
 }

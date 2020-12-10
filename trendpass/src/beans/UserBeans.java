@@ -1,7 +1,7 @@
 package beans;
 
 public class UserBeans {
-	private int userId;
+	private String userId;
 	private String userName;
 	private String userIcon;
 	private String mail;
@@ -9,10 +9,10 @@ public class UserBeans {
 	private int birth;
 	private String password;
 
-	public int getUserId() {
+	public String getUserId() {
 		return userId;
 	}
-	public void setUserId(int userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 	public String getUserName() {

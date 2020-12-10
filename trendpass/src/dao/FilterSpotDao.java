@@ -36,7 +36,7 @@ public class FilterSpotDao extends DaoBase{
 
 				spotBeans.setGenreId(rs.getString("genre_id"));
 				spotBeans.setLongitude(rs.getDouble("longitude"));
-				spotBeans.setRatitude(rs.getDouble("ratitude"));
+				spotBeans.setLatitude(rs.getDouble("ratitude"));
 				spotBeans.setSpotId(rs.getString("spot_id"));
 				spotBeans.setSpotName(rs.getString("spot_name"));
 
@@ -119,7 +119,7 @@ public class FilterSpotDao extends DaoBase{
 				spotBeans.setSpotId(rs.getString("spot.spot_id"));
 				spotBeans.setGenreId(rs.getString("spot.genre_id"));
 				spotBeans.setLongitude(rs.getDouble("Y(sp.position_infomation)"));
-				spotBeans.setRatitude(rs.getDouble("X(sp.position_infomation)"));
+				spotBeans.setLatitude(rs.getDouble("X(sp.position_infomation)"));
 
 				spotList.add(spotBeans);
 			}
@@ -149,6 +149,8 @@ public class FilterSpotDao extends DaoBase{
 					"(SELECT * FROM spot WHERE X (spot.position_infomation) BETWEEN ? - 1 AND ? + 1 AND Y (spot.position_infomation) BETWEEN ? - 1 AND ? + 1) AS near " +
 					"INNER JOIN stay ON near.spot_id = stay.spot_id GROUP BY near.spot_id ORDER BY COUNT(*) DESC");
 
+			System.out.println(stmt);
+
 			stmt.setDouble(1,latitude);
 			stmt.setDouble(2,latitude);
 			stmt.setDouble(3,longitude);
@@ -164,7 +166,7 @@ public class FilterSpotDao extends DaoBase{
 				spotBeans.setSpotId(rs.getString("spot_id"));
 				spotBeans.setGenreId(rs.getString("genre_id"));
 				spotBeans.setLongitude(rs.getDouble("Y(position_infomation)"));
-				spotBeans.setRatitude(rs.getDouble("X(position_infomation)"));
+				spotBeans.setLatitude(rs.getDouble("X(position_infomation)"));
 
 				spotList.add(spotBeans);
 			}
@@ -268,7 +270,7 @@ public class FilterSpotDao extends DaoBase{
 				spotBeans.setSpotId(rs.getString("spot_id"));
 				spotBeans.setGenreId(rs.getString("genre_id"));
 				spotBeans.setLongitude(rs.getDouble("Y (position_infomation)"));
-				spotBeans.setRatitude(rs.getDouble("X (position_infomation)"));
+				spotBeans.setLatitude(rs.getDouble("X (position_infomation)"));
 
 				spotList.add(spotBeans);
 			}
@@ -323,7 +325,7 @@ public class FilterSpotDao extends DaoBase{
 
 				spotBeans.setGenreId(rs.getString("genre_id"));
 				spotBeans.setLongitude(rs.getDouble("Y(position_infomation)"));
-				spotBeans.setRatitude(rs.getDouble("X(position_infomation)"));
+				spotBeans.setLatitude(rs.getDouble("X(position_infomation)"));
 				spotBeans.setSpotId(rs.getString("spot_id"));
 				spotBeans.setSpotName(rs.getString("spot_name"));
 
@@ -351,7 +353,7 @@ public class FilterSpotDao extends DaoBase{
 
 
 		try{
-			stmt = con.prepareStatement("SELECT spot_id,spot_name,X(position_infomation) as longitude,Y(position_infomation) as ratitude ,genre_id "
+			stmt = con.prepareStatement("SELECT spot_id,spot_name,X(position_infomation) as longitude,Y(position_infomation) as ratitude ,genre_id,user_id "
 					+ "FROM spot WHERE spot_id = ?");
 
 			stmt.setString(1, spotId);
@@ -363,9 +365,10 @@ public class FilterSpotDao extends DaoBase{
 				spotBeans = new SpotBeans();
 				spotBeans.setSpotId(rs.getString("spot_id"));
 				spotBeans.setSpotName(rs.getString("spot_name"));
-				spotBeans.setRatitude(rs.getDouble("ratitude"));
+				spotBeans.setLatitude(rs.getDouble("ratitude"));
 				spotBeans.setLongitude(rs.getDouble("longitude"));
 				spotBeans.setGenreId(rs.getString("genre_id"));
+				spotBeans.setUserId(rs.getString("user_id"));
 
 			}
 

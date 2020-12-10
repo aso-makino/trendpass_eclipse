@@ -37,6 +37,9 @@ public class NearSpotListServlet extends HttpServlet {
         	String latitude = request.getParameter("latitude");
         	String longitude = request.getParameter("longitude");
 
+        	System.out.println("Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†" + latitude);
+        	System.out.println("Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†" + longitude);
+
         	// modelê∂ê¨
         	FilterSpotModel filterSpotModel = new FilterSpotModel();
         	ReviewModel reviewModel = new ReviewModel();

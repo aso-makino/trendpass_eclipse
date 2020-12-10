@@ -5,8 +5,15 @@ import java.io.StringWriter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import beans.ReviewBeans;
+import beans.SpotBeans;
+import beans.SpotReviewBeans;
 
 public class ReviewDao extends DaoBase{
 
@@ -26,21 +33,16 @@ public class ReviewDao extends DaoBase{
 		System.out.println("ReviewDao 到達");
 
 		if(con == null) {
-			String error = "コネクション失敗";
-			reviewBeans.setError(error);
-			System.out.println("コネクションエラー");
 			return false;
 		}
 
 		//変数生成
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String error = "Daoまで接続";
-		reviewBeans.setError(error);
 		int review_number = 0;
 
 		//戻り値
-		boolean insert = true;
+		boolean result = false;
 
 		/*
 		//SQL文生成
@@ -60,34 +62,63 @@ public class ReviewDao extends DaoBase{
 
 		//二つ目のSQL
 		String sql_2 =  "INSERT INTO trendpass.review (spot_id,review_number,review_content,evaluation,"
-		+ "user_id,review_title)"
+		+ "user_id,review_image)"
 		+ "VALUES ( ? , ? , ? , ? , ? , ? );";
 
+		String sql3 = "INSERT INTO trendpass.stay (spot_id,user_id,stay_start)"
+				+ "VALUES ( ? , ? , ? );";
 
+
+		System.out.println(sql_2);
 		try {
 			System.out.println("sql 開始");
 
 
 			//SELECT文の実行
 			stmt = con.prepareStatement( sql_1 );
-			stmt.setInt( 1 , reviewBeans.getSpotId());
+			stmt.setString( 1 , reviewBeans.getSpotId());
 			rs = stmt.executeQuery();
 
 			while (rs.next()) {
 				review_number = rs.getInt("Max(review_number)");
 			}
 
-			//連番処理
+			//　連番処理
 			review_number ++;
+			System.out.println(review_number);
 
 			//SELECT文の実行
 			stmt = con.prepareStatement( sql_2 );
-			stmt.setInt( 1 , reviewBeans.getSpotId() );
+			stmt.setString( 1 , reviewBeans.getSpotId() );
 			stmt.setInt( 2 , review_number );
 			stmt.setString( 3 , reviewBeans.getReviewContent() );
-			stmt.setInt( 4 , reviewBeans.getEvaluation() );
-			stmt.setInt( 5 , reviewBeans.getUserId() );
-			stmt.setString(6, reviewBeans.getReviewTitle());
+			stmt.setString( 4 , reviewBeans.getEvaluation() );
+			stmt.setString( 5 , reviewBeans.getUserId() );
+			stmt.setString( 6 , reviewBeans.getReviewImage() );
+
+			//SQL文実行
+			int count = stmt.executeUpdate();
+			if(count == 1) {
+				result = true;
+
+				final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	            final Date date = new Date(System.currentTimeMillis());
+	            String stayTime = sdf.format(date);
+
+
+				stmt = con.prepareStatement( sql3 );
+				stmt.setString( 1 , reviewBeans.getSpotId() );
+				stmt.setString( 2 , reviewBeans.getUserId() );
+				stmt.setString( 3 , stayTime );
+				int count2 = stmt.executeUpdate();
+
+				if(count2 == 1) {
+					result = true;
+				}
+			}
+
+
+
 
 
 			//SELECT文の実行
@@ -115,15 +146,14 @@ public class ReviewDao extends DaoBase{
 
 			//AWSテスト
 			System.out.println(reviewBeans.getSpotId());
-			System.out.println( reviewBeans.getReviewContent());
+			System.out.println(reviewBeans.getReviewContent());
 			System.out.println(reviewBeans.getEvaluation());
 			System.out.println(reviewBeans.getUserId() );
-			System.out.println(reviewBeans.getReviewTitle());
+
 
 			System.out.println("sql commit 開始");
 
-			//SQL文実行
-			stmt.executeUpdate();
+
 
 			//con.commit();
 
@@ -133,19 +163,9 @@ public class ReviewDao extends DaoBase{
 
 			}catch(SQLException e) {
 				//エラー発生した場合にコンソールにログを出力する
-				error = "SQLException";
-				reviewBeans.setError(error);
-				StringWriter sw = new StringWriter();
-				PrintWriter pw = new PrintWriter(sw);
-				e.printStackTrace(pw);
-				pw.flush();
-				String str = sw.toString();
-				System.out.println(str);
-				insert = false;
-				System.out.println("SQLException発生");
-
+				e.printStackTrace();
 			}
-		return insert;
+		return result;
 	}
 
 
@@ -238,7 +258,7 @@ public class ReviewDao extends DaoBase{
 					reviewBeans.setReviewNumber(rs.getString("review_number"));
 					reviewBeans.setReviewContent(rs.getString("review_content"));
 					reviewBeans.setReviewImage(rs.getString("review_image"));
-					reviewBeans.setEvaluation(rs.getInt("evaluation"));
+					reviewBeans.setEvaluation(rs.getString("evaluation"));
 					reviewBeans.setUserId(rs.getString("user_id"));
 
 
@@ -253,4 +273,42 @@ public class ReviewDao extends DaoBase{
 
 		return list;
 	}
+
+	public boolean delete(String spotId ,String reviewNumber,String userId )throws SQLException{
+
+
+		if( con == null ){
+
+			return false;
+
+		}
+
+		int count = 0;
+		boolean result = false;
+
+		PreparedStatement stmt = null;
+
+		try{
+			stmt = con.prepareStatement("DELETE FROM review WHERE spot_id=? AND user_id=? AND review_number=?");
+			stmt.setString(1, spotId);
+			stmt.setString(2, userId);
+			stmt.setString(3, reviewNumber);
+
+			System.out.println(stmt);
+
+			count = stmt.executeUpdate();
+
+			if(count > 0) {
+				result = true;
+			}
+
+
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+
+		return result;
+	}
+
 }

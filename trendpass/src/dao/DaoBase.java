@@ -7,10 +7,12 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import exception.DBConnectException;
+
 public class DaoBase {
 
 	protected Connection con = null;
-	//テスト用後で消す
+	//繝�繧ｹ繝育畑蠕後〒豸医☆
 	//ReviewBeans reviewBeans = new ReviewBeans();
 
 
@@ -21,34 +23,39 @@ public class DaoBase {
 		this.con = con;
 	}
 
-	public void connect() {
+	public void connect() throws DBConnectException{
 
 		if (con != null) {
-			//接続済みの場合は何もしない
+			//謗･邯壽ｸ医∩縺ｮ蝣ｴ蜷医�ｯ菴輔ｂ縺励↑縺�
 			return;
 		}
 
 		InitialContext ctx;
 		try {
 			///////////////////////////////////
-			//DBの接続
+			//DB縺ｮ謗･邯�
 			String jndi = "java:comp/env/jdbc/MySQL";
 			ctx = new InitialContext();
 
 			DataSource ds = (DataSource) ctx.lookup(jndi);
 
-			// MySQLに接続
+			// MySQL縺ｫ謗･邯�
 			con = ds.getConnection();
 
 
 		} catch (NamingException e) {
 			//reviewBeans.setError2("NamingException");
 			e.printStackTrace();
-			//本当は例外をスローして上位側に処理を任せた方がよい
+			throw new DBConnectException(e);
+			//譛ｬ蠖薙�ｯ萓句､悶ｒ繧ｹ繝ｭ繝ｼ縺励※荳贋ｽ榊�ｴ縺ｫ蜃ｦ逅�繧剃ｻｻ縺帙◆譁ｹ縺後ｈ縺�
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new DBConnectException(e);
 			//reviewBeans.setError3("NamingException");
-			//本当は例外をスローして上位側に処理を任せた方がよい
+			//譛ｬ蠖薙�ｯ萓句､悶ｒ繧ｹ繝ｭ繝ｼ縺励※荳贋ｽ榊�ｴ縺ｫ蜃ｦ逅�繧剃ｻｻ縺帙◆譁ｹ縺後ｈ縺�
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw new DBConnectException(e);
 		}
 
 	}
@@ -87,12 +94,12 @@ public class DaoBase {
 	            try {
 	                con.rollback();
 	            }catch(SQLException e){
-	                System.out.println("rollebackに失敗しました：");
+	                System.out.println("rolleback縺ｫ螟ｱ謨励＠縺ｾ縺励◆�ｼ�");
 	            } finally{
 	                try{
 	                    con.setAutoCommit(true);
 	                }catch(SQLException e){
-	                    System.out.println("setAutoCommitに失敗しました：");
+	                    System.out.println("setAutoCommit縺ｫ螟ｱ謨励＠縺ｾ縺励◆�ｼ�");
 	                }
 	            }
 	        }

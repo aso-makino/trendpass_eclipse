@@ -80,12 +80,12 @@ public class SignUpServlet extends HttpServlet {
 	                    jsonText = jsonText.trim().replace("{", "").replace("}", "").replace(":", "").replace("\"", "").trim();
 	                    String[] userInfo = jsonText.split(",", 0);
 
-	                    userId = userInfo[0].replace("userId", "").trim();
-	                    userName  = userInfo[1].replace("userName", "").trim();
-	          			userMail  = userInfo[2].replace("mail", "").trim();
-	          			password  = userInfo[3].replace("password", "").trim();
-	          			sexString  = userInfo[4].replace("sex", "").trim();
-	          			birth  = Integer.parseInt(userInfo[5].replace("birth", "").trim());
+
+	                    userName  = userInfo[0].replace("userName", "").trim();
+	          			userMail  = userInfo[1].replace("mail", "").trim();
+	          			password  = userInfo[2].replace("password", "").trim();
+	          			sexString  = userInfo[3].replace("sex", "").trim();
+	          			birth  = Integer.parseInt(userInfo[4].replace("birth", "").trim());
 
 	          			System.out.println(userId);
 	          			System.out.println(userName);

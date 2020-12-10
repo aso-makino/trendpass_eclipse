@@ -3,6 +3,7 @@ package dao;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import beans.UserBeans;
@@ -29,10 +30,10 @@ public class UserDao extends DaoBase{
 		PreparedStatement stmt = null;
 
 		//戻り値
-		boolean delete = true;
+		boolean result = false;
 
 		//SQL文生成
-		String sql = "UPDATE trendpass.user SET flg = false WHERE user_id = ?";
+		String sql = "DELETE FROM user WHERE user_id = ?";
 
 		try {
 
@@ -41,7 +42,7 @@ public class UserDao extends DaoBase{
 			System.out.println("sql 開始");
 
 			stmt = con.prepareStatement( sql );
-			stmt.setInt( 1 , userBeans.getUserId() );
+			stmt.setString( 1 , userBeans.getUserId() );
 
 			//AWSテスト反映用
 			System.out.println( userBeans.getUserId() );
@@ -49,24 +50,25 @@ public class UserDao extends DaoBase{
 			//System.out.println("sql commit 開始");
 
 			//SQL文実行
-			stmt.executeUpdate();
+			int count = stmt.executeUpdate();
+
+			if(count == 1) {
+				result = true;
+			}
+
+
 
 			System.out.println("sql commit 終了");
 
 			System.out.println("sql 終了");
 
-			}catch(SQLException e) {
-				//エラー発生した場合にコンソールにログを出力する
-				StringWriter sw = new StringWriter();
-				PrintWriter pw = new PrintWriter(sw);
-				e.printStackTrace(pw);
-				pw.flush();
-				String str = sw.toString();
-				System.out.println(str);
-				delete = false;
-				}
+		}catch(SQLException e) {
+			//エラー発生した場合にコンソールにログを出力する
+			e.printStackTrace();
+
+		}
 		System.out.println("try 終了");
-		return delete;
+		return result;
 	}
 
 	public UserBeans getBy(String userId) throws SQLException{

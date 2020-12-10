@@ -60,7 +60,7 @@ public class SpotInitialServlet extends HttpServlet {
 
         		}else if(dataInfos[j].startsWith("latitude:")) {
         			double latitude = Double.parseDouble(dataInfos[j].replace("latitude:",""));
-        			spot.setRatitude(latitude);
+        			spot.setLatitude(latitude);
 
         		}else if(dataInfos[j].startsWith("longitude:")) {
         			double longitude = Double.parseDouble(dataInfos[j].replace("longitude:",""));

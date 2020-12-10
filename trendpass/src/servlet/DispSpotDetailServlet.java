@@ -70,6 +70,7 @@ public void doGet(HttpServletRequest request,HttpServletResponse response)
 
     		//　オブジェクトをJson文字列に変更
     		String resJson = mapper.writeValueAsString(resMap);
+    		System.out.println(resJson);
 
     		PrintWriter outPW = response.getWriter();
     		outPW.print(resJson);
