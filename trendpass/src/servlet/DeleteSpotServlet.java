@@ -27,7 +27,7 @@ public class DeleteSpotServlet extends HttpServlet {
 
         if ("/DeleteSpotServlet".equals(request.getServletPath())){
 
-        	//�@�w�b�_���ȂǃZ�b�g
+        	//�ｿｽ@�ｿｽw�ｿｽb�ｿｽ_�ｿｽ�ｿｽ�ｿｽﾈどセ�ｿｽb�ｿｽg
         	response.setContentType("application/json");
         	response.setHeader("Cache-Control", "nocache");
         	response.setCharacterEncoding("utf-8");
@@ -51,19 +51,20 @@ public class DeleteSpotServlet extends HttpServlet {
     			e.printStackTrace();
     		}
 
-    		String message ="";
 
-    		if(result == 1) {
-    			message="正常に削除できました";
+    		boolean resultB = false;
+
+    		if(result > 0) {
+    			resultB = true;
     		}else {
-    			message="削除できませんでした";
+    			resultB = false;
     		}
 
 
         	Map<String, Object> resMap = new HashMap<>();
-			resMap.put("message",message);
+			resMap.put("result",resultB);
 
-			//�@�I�u�W�F�N�g��Json������ɕύX
+			//�ｿｽ@�ｿｽI�ｿｽu�ｿｽW�ｿｽF�ｿｽN�ｿｽg�ｿｽ�ｿｽJson�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾉ変更
 			String resJson = mapper.writeValueAsString(resMap);
 
             PrintWriter out = response.getWriter();

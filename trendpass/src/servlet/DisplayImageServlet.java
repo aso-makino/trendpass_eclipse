@@ -55,21 +55,6 @@ public class DisplayImageServlet extends HttpServlet {
                 out.write(iData);
             }
 
-         //　ヘッダ情報などセット
-    		response.setContentType("application/json");
-    		response.setHeader("Cache-Control", "nocache");
-    		response.setCharacterEncoding("utf-8");
-
-    		ObjectMapper mapper = new ObjectMapper();
-
-            Map<String, String> resMap = new HashMap<>();
-    		resMap.put("res","true");
-
-    		//　オブジェクトをJson文字列に変更
-    		String resJson = mapper.writeValueAsString(resMap);
-
-    		PrintWriter outPW = response.getWriter();
-    		outPW.print(resJson);
         }catch(Exception e) {
             //ログを吐くなどのエラー処理、デフォルト画像を返すなど
         	e.printStackTrace();
@@ -78,7 +63,6 @@ public class DisplayImageServlet extends HttpServlet {
             if( in != null )    in.close();
             if( out != null )    out.close();
         }
-
 
     }
 

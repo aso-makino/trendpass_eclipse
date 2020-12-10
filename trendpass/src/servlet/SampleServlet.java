@@ -31,11 +31,13 @@ public class SampleServlet extends HttpServlet {
 	        	ObjectMapper mapper = new ObjectMapper();
 
 	        	String name  = request.getParameter("name");
-	            String greet = "����ɂ��́A" + name + "����B";
+	            String greet = "こんにちは" + name + "さん";
 
 	        	Map<String, Object> resMap = new HashMap<>();
 				resMap.put("str",greet);
 
+
+				//�@�I�u�W�F�N�g��Json������ɕύX
 				//JSON形式に変換
 				String resJson = mapper.writeValueAsString(resMap);
 
