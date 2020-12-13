@@ -47,7 +47,7 @@ import model.SpotModel;
  * Servlet implementation class InsertReviewServlet
  */
 @WebServlet("/InsertSpot")
-@MultipartConfig(location = "C:/Users/neco2/temporary_image")
+@MultipartConfig(location = "/usr/local/tomcat/webapps/img")
 public class InsertSpotServlet extends HttpServlet {
 
 protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -65,6 +65,11 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	String userId = null;
 
 	try {
+
+		//Windows縺ｨmac縺ｮ繝代せ縺ｮ蟾ｮ繧貞精蜿�
+//		String outputDir = System.getProperty("user.home")+"/output_imgfile";
+		String outputDir = "/usr/local/tomcat/work/output_imgfile";
+
     //multipart/form-dataによって提供されるこのリクエストのすべてのPart要素を取得
     for (Part part : request.getParts()) {
     	System.out.println("part::" + part);
@@ -85,7 +90,85 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
                 //　画像ファイル名に日付を追加し、保存
                 StringBuilder sb = new StringBuilder(f.getName());
                 name = sb.insert(sb.indexOf(".")-1, df.format(date)).toString();
-                part.write("C:/Users/neco2/output_imgfile/" + name);
+
+
+              //螟画焚螳｣險�
+                final String S3_SERVICE_END_POINT    = "http://s3-ap-northeast-1.amazonaws.com";
+              	final String S3_REGION               = "ap-northeast-1";
+              	final String access_key = "";
+            	final String Secret_access_key = "";
+      		//繧ｭ繝ｼ縺ｮ逕滓��
+      			AWSCredentials credentials
+      			= new BasicAWSCredentials(access_key,Secret_access_key);
+      			System.out.println("AWS-ClientKey縺ｮ逕滓��");
+
+      		 //S3繧ｯ繝ｩ繧､繧｢繝ｳ繝医�ｮ逕滓��
+      			ClientConfiguration clientConfig = new ClientConfiguration();
+      		 	clientConfig.setProtocol(Protocol.HTTP);  // 繝励Ο繝医さ繝ｫ
+      		    clientConfig.setConnectionTimeout(30000);  // 謗･邯壹ち繧､繝�繧｢繧ｦ繝�(ms)
+      		    System.out.println("AWS-Client縺ｮ諠�蝣ｱ險ｭ螳�");
+
+     		 //繧ｨ繝ｳ繝峨�昴う繝ｳ繝郁ｨｭ螳�
+      	        EndpointConfiguration endpointConfiguration =
+      	        		new EndpointConfiguration(S3_SERVICE_END_POINT,  S3_REGION);
+
+      	        AmazonS3 client = AmazonS3ClientBuilder
+      	        		.standard()
+      	        		.withCredentials(new AWSStaticCredentialsProvider(credentials))
+      	                .withClientConfiguration(clientConfig)
+      	                .withEndpointConfiguration(endpointConfiguration).build();
+      	        System.out.println("繧ｨ繝ｳ繝峨�昴う繝ｳ繝医�ｮ險ｭ螳�");
+
+      	        TransferManager manager = TransferManagerBuilder.standard()
+      	        		  .withS3Client(client)
+      	        		  .withMultipartUploadThreshold((long) (1024L*1024L*1024L*1024L*1024L))
+      	        		  .withExecutorFactory(() -> Executors.newFixedThreadPool(1000))
+      	        		  .build();
+      	        System.out.println("騾∽ｿ｡譁ｹ豕輔�ｮ霑ｽ蜉�險ｭ螳�");
+
+
+      	    //繝�繝ｼ繧ｿ繧ｹ繝医Μ繝ｼ繝�髢句ｧ�
+    	        InputStream inputStream = part.getInputStream();
+    	        System.out.println("DataStream縺ｮ髢区叛");
+
+    	        //繝｡繧ｿ諠�蝣ｱ繧堤函謌�
+    	        ObjectMetadata putMetaData = new ObjectMetadata();
+    	        putMetaData.setContentLength(part.getSize());
+    	        System.out.println("繝｡繧ｿ諠�蝣ｱ繧定ｿｽ蜉�");
+
+    	        //upload-繝ｪ繧ｯ繧ｨ繧ｹ繝医ｒ逕滓��
+    	        System.out.println("S3upload繝ｪ繧ｯ繧ｨ繧ｹ繝磯幕蟋�");
+    	        Upload upload =
+            		manager.upload(
+            				"trendpasss",//Bucket蜷�
+            				name,//菫晏ｭ倥＆繧後ｋ髫帙�ｮ蜷榊燕
+            				inputStream,//逕ｻ蜒上ョ繝ｼ繧ｿ
+            				putMetaData//expect_byte
+            				);
+
+    	        System.out.println("try髢句ｧ�");
+
+    	        try {
+
+    	        	upload.waitForCompletion();
+    	        	System.out.println("繧｢繝�繝励Ο繝ｼ繝画�仙粥");
+
+    	        } catch (InterruptedException e1) {
+
+    	        	new IOException(e1);
+    	        	System.out.println(e1);
+    	        	System.out.println("繧｢繝�繝励Ο繝ｼ繝牙､ｱ謨�");
+
+            }
+
+    	        System.out.println("try邨ゆｺ�");
+    	        System.out.println("S3upload繝ｪ繧ｯ繧ｨ繧ｹ繝育ｵゆｺ�");
+
+    	        inputStream.close();
+    	        System.out.println("datastream髢蛾事");
+
+
+
             }
 
             if(str.startsWith("name=\"description\"")) {
@@ -134,9 +217,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 		//String title = getStringParamFromPart(request);
 		//System.out.println("逕ｻ蜒上�ｮ譁�蟄怜�励�ｮ繝代Λ繝｡繝ｼ繧ｿ繧貞叙蠕�");
 
-		//Windows縺ｨmac縺ｮ繝代せ縺ｮ蟾ｮ繧貞精蜿�
-		//String outputDir = System.getProperty("user.home")+"/output_imgfile";
-		//String outputDir = "/usr/local/tomcat/work/output_imgfile";
+
 
 		//騾√ｉ繧後※縺阪◆逕ｻ蜒上�ｮ諠�蝣ｱ繧貞叙蠕�
 //		Part part = request.getPart("image");
@@ -179,83 +260,12 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 
         /*逕ｻ蜒上ｒS3縺ｫ菫晏ｭ倥☆繧九Γ繧ｽ繝�繝�*/
 
-		//螟画焚螳｣險�
-//        final String S3_SERVICE_END_POINT    = "http://s3-ap-northeast-1.amazonaws.com";
-//        final String S3_REGION               = "ap-northeast-1";
-//		final String access_key = "";
-//		final String Secret_access_key = "";
 
-		//繧ｭ繝ｼ縺ｮ逕滓��
-//		 AWSCredentials credentials
-//		 = new BasicAWSCredentials(access_key,Secret_access_key);
-//		 System.out.println("AWS-ClientKey縺ｮ逕滓��");
-
-		 //S3繧ｯ繝ｩ繧､繧｢繝ｳ繝医�ｮ逕滓��
-//		 ClientConfiguration clientConfig = new ClientConfiguration();
-//		 	clientConfig.setProtocol(Protocol.HTTP);  // 繝励Ο繝医さ繝ｫ
-//		    clientConfig.setConnectionTimeout(30000);  // 謗･邯壹ち繧､繝�繧｢繧ｦ繝�(ms)
-//		    System.out.println("AWS-Client縺ｮ諠�蝣ｱ險ｭ螳�");
-//
-//		 //繧ｨ繝ｳ繝峨�昴う繝ｳ繝郁ｨｭ螳�
-//	        EndpointConfiguration endpointConfiguration =
-//	        		new EndpointConfiguration(S3_SERVICE_END_POINT,  S3_REGION);
-//
-//	        AmazonS3 client = AmazonS3ClientBuilder
-//	        		.standard()
-//	        		.withCredentials(new AWSStaticCredentialsProvider(credentials))
-//	                .withClientConfiguration(clientConfig)
-//	                .withEndpointConfiguration(endpointConfiguration).build();
-//	        System.out.println("繧ｨ繝ｳ繝峨�昴う繝ｳ繝医�ｮ險ｭ螳�");
-//
-//	        TransferManager manager = TransferManagerBuilder.standard()
-//	        		  .withS3Client(client)
-//	        		  .withMultipartUploadThreshold((long) (1024L*1024L*1024L*1024L*1024L))
-//	        		  .withExecutorFactory(() -> Executors.newFixedThreadPool(1000))
-//	        		  .build();
-//	        System.out.println("騾∽ｿ｡譁ｹ豕輔�ｮ霑ｽ蜉�險ｭ螳�");
 //
 //	        // 諡｡蠑ｵ蟄舌ｒ蜿門ｾ�
 //	        String extension = filename_def.substring(filename_def.lastIndexOf("."));
 //
-//	        //繝�繝ｼ繧ｿ繧ｹ繝医Μ繝ｼ繝�髢句ｧ�
-//	        InputStream inputStream = part.getInputStream();
-//	        System.out.println("DataStream縺ｮ髢区叛");
 //
-//	        //繝｡繧ｿ諠�蝣ｱ繧堤函謌�
-//	        ObjectMetadata putMetaData = new ObjectMetadata();
-//	        putMetaData.setContentLength(part.getSize());
-//	        System.out.println("繝｡繧ｿ諠�蝣ｱ繧定ｿｽ蜉�");
-//
-//	        //upload-繝ｪ繧ｯ繧ｨ繧ｹ繝医ｒ逕滓��
-//	        System.out.println("S3upload繝ｪ繧ｯ繧ｨ繧ｹ繝磯幕蟋�");
-//	        Upload upload =
-//        		manager.upload(
-//        				"trendpasss",//Bucket蜷�
-//        				filename,//菫晏ｭ倥＆繧後ｋ髫帙�ｮ蜷榊燕
-//        				inputStream,//逕ｻ蜒上ョ繝ｼ繧ｿ
-//        				putMetaData//expect_byte
-//        				);
-//
-//	        System.out.println("try髢句ｧ�");
-//
-//	        try {
-//
-//	        	upload.waitForCompletion();
-//	        	System.out.println("繧｢繝�繝励Ο繝ｼ繝画�仙粥");
-//
-//	        } catch (InterruptedException e1) {
-//
-//	        	new IOException(e1);
-//	        	System.out.println(e1);
-//	        	System.out.println("繧｢繝�繝励Ο繝ｼ繝牙､ｱ謨�");
-//
-//        }
-//
-//	        System.out.println("try邨ゆｺ�");
-//	        System.out.println("S3upload繝ｪ繧ｯ繧ｨ繧ｹ繝育ｵゆｺ�");
-//
-//	        inputStream.close();
-//	        System.out.println("datastream髢蛾事");
 
 	        //Beans繧､繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ逕滓��
 	        SpotBeans spotBeans = new SpotBeans();

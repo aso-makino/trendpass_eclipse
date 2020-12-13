@@ -121,6 +121,9 @@ public class UserDao extends DaoBase{
 					+ "user_name,user_icon,mail,password,sex,birth) "
 					+ "VALUES(?,?,?,?,?,?)");
 
+			System.out.println("userDao:userName//" + userBeans.getUserName());
+			System.out.println("userDao:userIcon//" + userBeans.getUserIcon());
+			System.out.println("userDao:password//" + userBeans.getPassword());
 			/////////////////////////////////
 			//�ｿｽ@�ｿｽl�ｿｽ�ｿｽ�ｿｽZ�ｿｽb�ｿｽg
 			stmt.setString(1,userBeans.getUserName());

@@ -34,6 +34,12 @@ public class SpotDao  extends DaoBase{
 			return null;
 		}
 
+		try {
+			con.setAutoCommit(false);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
 		//螟画焚逕滓��
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -77,7 +83,7 @@ public class SpotDao  extends DaoBase{
 			int count = stmt.executeUpdate();
 
 			if(count == 1) {
-				String sql2 = "SELECT LAST_INSERT_ID() as spot_id";
+				String sql2 = "SELECT LAST_INSERT_ID() as spot_id FROM spot";
 
 				stmt = con.prepareStatement( sql2 );
 				rs = stmt.executeQuery();
@@ -88,6 +94,11 @@ public class SpotDao  extends DaoBase{
 				}
 			}
 
+			try {
+				con.commit();
+			}finally {
+				con.setAutoCommit(true);
+			}
 
 			System.out.println("sql commit 邨ゆｺ�");
 
