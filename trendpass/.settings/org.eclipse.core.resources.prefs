@@ -25,3 +25,6 @@ encoding//src/servlet/SignUpServlet.java=UTF-8
 encoding//src/servlet/SortSpotListServlet.java=UTF-8
 encoding//src/servlet/SpotInitialServlet.java=UTF-8
 encoding//src/servlet/UnsubscribeServlet.java=UTF-8
+
+encoding//src/dao/PassDao.java=UTF-8
+encoding//src/model/UserPositionModel.java=UTF-8

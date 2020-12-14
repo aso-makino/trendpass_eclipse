@@ -17,19 +17,19 @@ public class UserPositionDao extends DaoBase{
 
 		int result = 0;
 
-		//@DateŒ^‚Å“ú•tæ“¾
+		//ï¿½@Dateï¿½^ï¿½Å“ï¿½ï¿½tï¿½æ“¾
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
 
-        //@DateŒ^‚ğCalendarŒ^‚É•ÏŠ·‚µA“ú•t‚ğ‰ÁZ
+        //ï¿½@Dateï¿½^ï¿½ï¿½Calendarï¿½^ï¿½É•ÏŠï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½tï¿½ï¿½ï¿½ï¿½ï¿½Z
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.DATE, -7);
 
-        //@DateŒ^‚É–ß‚·
+        //ï¿½@Dateï¿½^ï¿½É–ß‚ï¿½
         date = cal.getTime();
 
-        //@StringŒ^‚É•ÏŠ·
+        //ï¿½@Stringï¿½^ï¿½É•ÏŠï¿½
         String dateStr = df.format(date);
 
 		PreparedStatement stmt = null;
@@ -49,4 +49,34 @@ public class UserPositionDao extends DaoBase{
 
 		return result;
 	}
+
+	public void insert(UserPositionBeans userPosition) throws SQLException{
+		//DBï¿½Ú‘ï¿½ï¿½mï¿½F
+		if(con==null) {
+			return;
+		}
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+		//ï¿½@ï¿½ï¿½ï¿½ê‚¿ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½Ìï¿½ï¿½Ôï¿½ï¿½
+		String stayStart = sdf.format(userPosition.getStayStart());
+
+		PreparedStatement stmt = null;
+		String sql = "INSERT INTO user_position(user_id, position_infomation, stay_start) "
+				+ "VALUES(?,ST_GeomFromText(\"POINT(" + userPosition.getLatitude() + " " + userPosition.getLongitude() + ")\"),?)";
+
+		try {
+			//insertï¿½ï¿½ï¿½Ì”ï¿½ï¿½s
+			stmt = con.prepareStatement(sql);
+
+			stmt.setString(1,userPosition.getUserId());
+			stmt.setString(2, stayStart);
+			stmt.executeUpdate();
+
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
 }

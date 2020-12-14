@@ -13,10 +13,10 @@ public class UserPositionModel {
 		int result = 0;
 
 		try{
-			//@Ú‘±
+			//ï¿½@ï¿½Ú‘ï¿½
 			userPositionDao.connect();
 
-			//@ŒŸõŒ‹‰Ê‚Ìæ“¾
+			//ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê‚Ìæ“¾
 		    result = userPositionDao.delete();
 
 		}catch(SQLException e) {
@@ -26,10 +26,35 @@ public class UserPositionModel {
 			e.printStackTrace();
 			throw e;
 		}finally {
-			//@Ú‘±iƒRƒlƒNƒVƒ‡ƒ“j‚ğ•Â‚¶‚é
+			//ï¿½@ï¿½Ú‘ï¿½ï¿½iï¿½Rï¿½lï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½jï¿½ï¿½Â‚ï¿½ï¿½ï¿½
 			userPositionDao.close();
 		}
 
 		return result;
+	}
+
+	public void insert(UserPositionBeans userPosition) throws SQLException, DBConnectException{
+
+		UserPositionDao userPositionDao = new UserPositionDao();
+
+		try {
+			////////////////////
+			//DBï¿½Ú‘ï¿½
+			userPositionDao.connect();
+
+			//ï¿½@ï¿½ÔMï¿½ï¿½ï¿½Ì“oï¿½^
+			userPositionDao.insert(userPosition);
+
+
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}catch(DBConnectException e) {
+			e.printStackTrace();
+			throw e;
+		}
+		finally {
+			userPositionDao.close();
+		}
 	}
 }

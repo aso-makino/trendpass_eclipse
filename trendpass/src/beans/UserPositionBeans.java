@@ -1,10 +1,12 @@
 package beans;
 
+import java.util.Date;
+
 public class UserPositionBeans {
 	private String userId;
 	private double latitude;//　緯度
 	private double longitude;//　経度
-	private long stayStart;
+	private Date stayStart;
 	private long stayEnd;
 
 	public String getUserId() {
@@ -25,10 +27,10 @@ public class UserPositionBeans {
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
-	public long getStayStart() {
+	public Date getStayStart() {
 		return stayStart;
 	}
-	public void setStayStart(long stayStart) {
+	public void setStayStart(Date stayStart) {
 		this.stayStart = stayStart;
 	}
 	public long getStayEnd() {
